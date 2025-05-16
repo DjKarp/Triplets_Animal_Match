@@ -37,15 +37,15 @@ namespace TripletsAnimalMatch
             Rat
         }
 
-        public List<Texture2D> ShapesCircle = new List<Texture2D>();
+        public List<Sprite> ShapesCircle = new List<Sprite>();
 
-        public List<Texture2D> ShapesHexagon = new List<Texture2D>();
+        public List<Sprite> ShapesHexagon = new List<Sprite>();
 
-        public List<Texture2D> ShapesPentagon = new List<Texture2D>();
+        public List<Sprite> ShapesPentagon = new List<Sprite>();
 
-        public List<Texture2D> ShapesRectangle = new List<Texture2D>();
+        public List<Sprite> ShapesRectangle = new List<Sprite>();
 
-        public List<Texture2D> AnimalTexture = new List<Texture2D>();
+        public List<Sprite> AnimalTexture = new List<Sprite>();
 
         public List<GameObject> ShapesColliders = new List<GameObject>();
 

@@ -7,10 +7,14 @@ namespace TripletsAnimalMatch
     [CreateAssetMenu(fileName = "GameplayData", menuName = "CreateScriptableObject", order = 1)]
     public class GameplayDataSO : ScriptableObject
     {
-        private int _fishkiMaxCountOnScene = 60;
+        [SerializeField] private int _fishkiMaxCountOnScene = 60;
         public int FishkiMaxCountOnScene { get => _fishkiMaxCountOnScene; }
 
-        private int _fishkiCountOnMatch = 3;
+        [SerializeField] private int _fishkiCountOnMatch = 3;
         public int FishkiCountOnMatch { get => _fishkiCountOnMatch; }
+
+        [SerializeField] private float _timeSpawn = 0.5f;
+
+        public float TimeSpawn { get => _timeSpawn; }
     }
 }

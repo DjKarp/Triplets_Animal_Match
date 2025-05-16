@@ -10,8 +10,9 @@ namespace TripletsAnimalMatch
         private GameView _gameView;
         private GameModel _gameModel;
 
-        private float _timeSpawn = 0.5f;
-        private List<Fishka> _fishki = new List<Fishka>();
+        private List<Fishka> _fishkiStart = new List<Fishka>();
+        private List<Fishka> _fishkiOnPanel = new List<Fishka>();
+        private List<Fishka> _fishkiCompleate = new List<Fishka>();
 
         [Inject]
         public void Construct(GameView gameView, GameModel gameModel)
@@ -20,9 +21,10 @@ namespace TripletsAnimalMatch
             _gameModel = gameModel;
         }
 
-        public void Init(Transform spawnPoint)
+        public void Init()
         {
-            _fishki = _gameModel
+            _fishkiStart = _gameModel.GetCreatePoolFishek();            
+            _gameView.DropFishkiOnScene(_fishkiStart);
         }
 
         private void OnFishkaClick(Fishka fishka)

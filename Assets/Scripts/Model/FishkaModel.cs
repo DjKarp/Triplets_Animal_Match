@@ -9,5 +9,12 @@ namespace TripletsAnimalMatch
         public FishkiData.Shape Shape;
         public FishkiData.Color Color;
         public FishkiData.AnimalType AnimalType;
+
+        public FishkaModel(FishkiData.Shape shape, FishkiData.Color color, FishkiData.AnimalType animalType)
+        {
+            Shape = shape;
+            Color = color;
+            AnimalType = animalType;
+        }
     }
 }
