@@ -1,0 +1,13 @@
+Assets/Plugins/
+.vsconfig
+Assembly-CSharp.csproj
+Assembly-CSharp-firstpass.csproj
+DOTween.Modules.csproj
+TripletsAnimalMatch.sln
+Zenject.csproj
+Zenject-Editor.csproj
+Zenject-PoolMonitor-Editor.csproj
+Zenject-ReflectionBaking-Editor.csproj
+.vs/TripletsAnimalMatch/v16/.suo
+Assets/Textures/Components/
+Assets/Textures/SceneTextures/
