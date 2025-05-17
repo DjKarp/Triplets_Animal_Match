@@ -16,6 +16,9 @@ namespace TripletsAnimalMatch
         private Transform _transform;
         public Transform Transform { get => _transform; }
 
+        private int _numberPositionOnTopPanel;
+        public int NumberPositionOnTopPanel { set => _numberPositionOnTopPanel = value; }
+
         [SerializeField] private SpriteRenderer _shapeSprite;
         [SerializeField] private SpriteRenderer _animalsSprite;
         [SerializeField] private Transform _colliderPosition;
@@ -41,7 +44,7 @@ namespace TripletsAnimalMatch
             _transform = gameObject.transform;
             _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 
-            _signalBus.Subscribe<StartStopGameplay>(SwitchBoolIsGameplay);
+            _signalBus.Subscribe<StartStopGameplaySignal>(SwitchBoolIsGameplay);
         }
 
         public void MoveToTopPanel(Vector3 endPosition, float duration)
@@ -52,7 +55,7 @@ namespace TripletsAnimalMatch
                 .Append(_transform.DOMove(endPosition, duration).SetEase(Ease.OutSine))
                 .Insert(0, _transform.DOScale(_scaleOnTopPanel, duration / 5))
                 .Insert(1, _transform.DORotate(Vector3.zero, duration / 5))
-                .OnComplete(() => _signalBus.Fire(new FishkaOnTopPanel()));
+                .OnComplete(() => _signalBus.Fire(new FishkaOnTopPanelSignal(this, _numberPositionOnTopPanel)));
         }
 
         public void MoveToFinishPlace(Vector3 finishPosition, float duration)
@@ -93,7 +96,7 @@ namespace TripletsAnimalMatch
             _animalsSprite.sortingOrder++;
         }
 
-        private void SwitchBoolIsGameplay(StartStopGameplay startStopGameplay)
+        private void SwitchBoolIsGameplay(StartStopGameplaySignal startStopGameplay)
         {
             _isGameplayOn = startStopGameplay.IsStart;
         }

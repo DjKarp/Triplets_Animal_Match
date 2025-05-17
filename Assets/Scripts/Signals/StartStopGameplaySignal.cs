@@ -1,10 +1,10 @@
 namespace TripletsAnimalMatch
 {
-    public class StartStopGameplay
+    public class StartStopGameplaySignal
     {
         public bool IsStart;
 
-        public StartStopGameplay(bool isStart)
+        public StartStopGameplaySignal(bool isStart)
         {
             IsStart = isStart;
         }

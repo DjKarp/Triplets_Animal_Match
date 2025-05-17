@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Zenject;
+using DG.Tweening;
+
+namespace TripletsAnimalMatch
+{
+    public class FishkiReloadButton : MonoBehaviour
+    {
+        private GameView _gameView;
+        private List<SpriteRenderer> _spriteRenderers;
+        private Animator _animator;
+
+        [Inject]
+        public void Construct(GameView gameView)
+        {
+            _gameView = gameView;
+        }
+
+        private void Awake()
+        {
+            _spriteRenderers = new List<SpriteRenderer>();
+            _spriteRenderers.AddRange(GetComponentsInChildren<SpriteRenderer>());
+            _animator = GetComponentInChildren<Animator>();
+        }
+
+        public void Hide()
+        {
+            foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
+                spriteRenderer.DOFade(0.0f, 0.5f);
+        }
+
+        public void Show()
+        {
+            foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
+                spriteRenderer.DOFade(1.0f, 1.0f);
+        }
+
+        private void OnMouseDown()
+        {
+            _animator.SetTrigger("isClick");            
+        }
+
+        // Call from Animations
+        public void ButtonClick()
+        {
+            _gameView.ReloadFishkiOnScene();
+        }
+    }
+}

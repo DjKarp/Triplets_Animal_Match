@@ -26,7 +26,7 @@ namespace TripletsAnimalMatch
             _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek());
 
             _signalBus.Subscribe<ClickOnFishkaSignal>(OnFishkaClick);
-            _signalBus.Subscribe<FishkaOnTopPanel>(TryMatchFishikiOnTopPanel);
+            _signalBus.Subscribe<FishkaOnTopPanelSignal>(TryMatchFishikiOnTopPanel);
         }
 
         public void ReloadFishki()
@@ -41,7 +41,7 @@ namespace TripletsAnimalMatch
             _gameView.GoFishkuOnTopPanel(clickOnFishkaSignal.Fishka);
         }
 
-        private void TryMatchFishikiOnTopPanel(FishkaOnTopPanel fishkaOnTopPanel)
+        private void TryMatchFishikiOnTopPanel(FishkaOnTopPanelSignal fishkaOnTopPanel)
         {
             var triplesMatch = _gameModel.CheckMatch();
 

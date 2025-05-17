@@ -10,7 +10,7 @@ namespace TripletsAnimalMatch
     {
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private Cloud _cloud;
-        [SerializeField] private FishkiReloadButton _reloadButton;
+        private FishkiReloadButton _reloadButton;
 
         private SpawnPoint _spawnPoint;
         private GamePresenter _gamePresenter;
@@ -19,11 +19,12 @@ namespace TripletsAnimalMatch
         private SignalBus _signalBus;
 
         [Inject]
-        public void Construct(GamePresenter gamePresenter, SpawnPoint spawnPoint, GameplayData gameplayData, SignalBus signalBus)
+        public void Construct(GamePresenter gamePresenter, SpawnPoint spawnPoint, GameplayData gameplayData, SignalBus signalBus, FishkiReloadButton fishkiReloadButton)
         {
             _gamePresenter = gamePresenter;
             _spawnPoint = spawnPoint;
             _gameplayData = gameplayData;
+            _reloadButton = fishkiReloadButton;
 
             _signalBus = signalBus;
         }
@@ -31,6 +32,8 @@ namespace TripletsAnimalMatch
         private void Start()
         {
             _reloadButton.Hide();
+
+            _signalBus.Subscribe<FishkaOnTopPanelSignal>(AddedFishkuOnTopPanel);
         }
 
         public void GoFishkuOnTopPanel(Fishka fishka)
@@ -83,7 +86,7 @@ namespace TripletsAnimalMatch
 
         private void StartStopGameplay(bool isStart)
         {
-            _signalBus.Fire(new StartStopGameplay(isStart));
+            _signalBus.Fire(new StartStopGameplaySignal(isStart));
         }
 
         public void ReloadFishkiOnScene()
@@ -100,6 +103,11 @@ namespace TripletsAnimalMatch
                 fishkas[i].DestroyFromGamefield();
             }
             onCompleate?.Invoke();
+        }
+
+        public void AddedFishkuOnTopPanel(FishkaOnTopPanelSignal fishkaOnTopPanel)
+        {
+            _topPanel.AddedFishkuOnTopPanel(fishkaOnTopPanel.Fishka, fishkaOnTopPanel.NumberPosition);
         }
 
         private void OnDisable()
