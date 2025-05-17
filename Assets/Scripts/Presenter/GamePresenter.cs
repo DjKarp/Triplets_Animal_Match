@@ -30,14 +30,27 @@ namespace TripletsAnimalMatch
         }
 
         public void ReloadFishki()
+        {           
+            StartCoroutine(WaitBeforeDrop(_gameModel.GetCountFishkiOnGameplace()));
+        }
+
+        private IEnumerator WaitBeforeDrop(int count)
         {
-            int fishkiCount = _gameModel.FishkiList.Count;
+            while(!_gameModel.IsAllMoveFishkiOnTopPanel())
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
             _gameView.EraseGameField(_gameModel.FishkiList, () => _gameModel.FishkiList = new List<Fishka>());
-            _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek(fishkiCount));
+
+            yield return new WaitForSeconds(1.0f);
+
+            _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek(count), false);
         }
 
         private void OnFishkaClick(ClickOnFishkaSignal clickOnFishkaSignal)
         {
+            _gameModel.RemoveFishkaFromGameplace(clickOnFishkaSignal.Fishka);
             _gameView.GoFishkuOnTopPanel(clickOnFishkaSignal.Fishka);
         }
 

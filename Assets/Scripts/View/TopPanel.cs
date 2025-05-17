@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using System.Linq;
 
 namespace TripletsAnimalMatch
 {
@@ -11,7 +12,10 @@ namespace TripletsAnimalMatch
         [SerializeField] private Transform[] _fishkiPosition = new Transform[7];
         private Fishka[] _fishkasPlace;
         public Fishka[] FishkasPlace { get => _fishkasPlace; }
+
         private bool[] _placeUse;
+
+        public int CountFishki { get => _placeUse.Count(x => x == true); }
 
         protected override void Init()
         {
@@ -53,12 +57,16 @@ namespace TripletsAnimalMatch
             return Vector3.zero;
         }
 
-        public void RemoveFishkaFromTopPanel(Fishka fishka)
+        public void RemoveFishkaFromTopPanel(Fishka fishka, bool isDestroy = false)
         {
             for (int i = 0; i < _fishkasPlace.Length; i++)
                 if (_fishkasPlace[i] == fishka)
                 {
-                    _fishkasPlace[i] = null;
+                    if (isDestroy)
+                        _fishkasPlace[i].DestroyFromGamefield();
+                    else
+                        _fishkasPlace[i] = null;
+
                     _placeUse[i] = false;
                 }
         }
@@ -66,6 +74,11 @@ namespace TripletsAnimalMatch
         public void AddedFishkuOnTopPanel(Fishka fishka, int number)
         {
             _fishkasPlace[number] = fishka;
+        }
+
+        public bool IsAllMoveFishkiOnTopPanel()
+        {
+            return _fishkasPlace.Count(x => x != null) == _placeUse.Count(x => x == true);
         }
     }
 }

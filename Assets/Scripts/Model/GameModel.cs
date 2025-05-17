@@ -87,6 +87,11 @@ namespace TripletsAnimalMatch
             return null;
         }
 
+        public void RemoveFishkaFromGameplace(Fishka fishka)
+        {
+            _createFishkiList.Remove(fishka);
+        }
+
         public bool IsGameOver()
         {
             return _topPanel.FishkasPlace.All(x => x != null);
@@ -95,6 +100,16 @@ namespace TripletsAnimalMatch
         public bool IsWinner()
         {
             return _topPanel.FishkasPlace.All(x => x == null) && _createFishkiList.Count == 0;
+        }
+
+        public int GetCountFishkiOnGameplace()
+        {
+            return _createFishkiList.Count + _topPanel.CountFishki;
+        }
+
+        public bool IsAllMoveFishkiOnTopPanel()
+        {
+            return _topPanel.IsAllMoveFishkiOnTopPanel();
         }
 
         private List<FishkaModel> CreateUniqueFishkaModels(int maxFishkiCount)

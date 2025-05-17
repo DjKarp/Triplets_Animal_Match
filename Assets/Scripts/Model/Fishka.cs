@@ -74,8 +74,8 @@ namespace TripletsAnimalMatch
             _tweenSequence = DOTween.Sequence();
 
             _tweenSequence
-                .Append(_transform.DOShakeScale(UnityEngine.Random.Range(0.5f, 1.5f)))
-                .Append(_transform.DOScale(Vector3.zero, UnityEngine.Random.Range(0.5f, 1.5f)))
+                .Append(_transform.DOShakeScale(UnityEngine.Random.Range(0.2f, 1.0f), strength: 0.5f))
+                .Append(_transform.DOScale(Vector3.zero, UnityEngine.Random.Range(0.2f, 1.0f)))
                 .OnComplete(() => Destroy(this));
         }
 

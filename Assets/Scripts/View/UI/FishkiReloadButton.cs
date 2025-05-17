@@ -11,6 +11,7 @@ namespace TripletsAnimalMatch
         private GameView _gameView;
         private List<SpriteRenderer> _spriteRenderers;
         private Animator _animator;
+        private PolygonCollider2D _collider;
 
         [Inject]
         public void Construct(GameView gameView)
@@ -23,16 +24,19 @@ namespace TripletsAnimalMatch
             _spriteRenderers = new List<SpriteRenderer>();
             _spriteRenderers.AddRange(GetComponentsInChildren<SpriteRenderer>());
             _animator = GetComponentInChildren<Animator>();
+            _collider = GetComponent<PolygonCollider2D>();
         }
 
         public void Hide()
         {
+            _collider.enabled = false;
             foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
                 spriteRenderer.DOFade(0.0f, 0.5f);
         }
 
         public void Show()
         {
+            _collider.enabled = true;
             foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
                 spriteRenderer.DOFade(1.0f, 1.0f);
         }

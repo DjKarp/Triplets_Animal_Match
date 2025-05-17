@@ -10,6 +10,8 @@ namespace TripletsAnimalMatch
     {
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private Cloud _cloud;
+        [SerializeField] private ScreenWinner _screenWinner;
+        [SerializeField] private ScreenLooser _screenLooser;
         private FishkiReloadButton _reloadButton;
 
         private SpawnPoint _spawnPoint;
@@ -33,6 +35,9 @@ namespace TripletsAnimalMatch
         {
             _reloadButton.Hide();
 
+            _screenWinner.gameObject.SetActive(true);
+            _screenLooser.gameObject.SetActive(true);
+
             _signalBus.Subscribe<FishkaOnTopPanelSignal>(AddedFishkuOnTopPanel);
         }
 
@@ -41,8 +46,6 @@ namespace TripletsAnimalMatch
             Vector3 position = _topPanel.GetNextFishkaPosition(fishka);
             if (position != Vector3.zero)
                 fishka.MoveToTopPanel(position, _gameplayData.TimeMoveFishkaToTopPanel);
-            else
-                Debug.LogError("Chech position on TopPanel! => " + fishka.gameObject.GetInstanceID());
         }
 
         public void GoFishkuToFinishPlace(Fishka fishka)
@@ -53,22 +56,22 @@ namespace TripletsAnimalMatch
 
         public void ShowScreenGameOver()
         {
-            StartStopGameplay(false);
-            Debug.LogError("Game Over!");
+            StopGame();
+            _screenLooser.Show();
         }
 
         public void ShowScreenWinner()
         {
-            StartStopGameplay(false);
-            Debug.LogError("You Win!");
+            StopGame();
+            _screenWinner.Show();
         }
 
-        public void DropFishkiOnScene(List<Fishka> fishkas)
+        public void DropFishkiOnScene(List<Fishka> fishkas, bool isStart = true)
         {
-            _cloud.Show(() => StartCoroutine(DropFishkiOnTime(fishkas)));
+            _cloud.Show(() => StartCoroutine(DropFishkiOnTime(fishkas, isStart)));
         }
 
-        private IEnumerator DropFishkiOnTime(List<Fishka> fishkas)
+        private IEnumerator DropFishkiOnTime(List<Fishka> fishkas, bool isStart = true)
         {
             foreach (Fishka fishka in fishkas)
             {
@@ -78,7 +81,8 @@ namespace TripletsAnimalMatch
                 yield return new WaitForSeconds(_gameplayData.TimeSpawn);
             }
 
-            _topPanel.Show();
+            if (isStart) 
+                _topPanel.Show();
             _reloadButton.Show();
 
             StartStopGameplay(true);
@@ -96,18 +100,32 @@ namespace TripletsAnimalMatch
             _gamePresenter.ReloadFishki();
         }
 
-        public void EraseGameField(List<Fishka> fishkas, Action onCompleate)
+        public void EraseGameField(List<Fishka> fishkas, Action onComplete)
         {
-            for (int i = fishkas.Count - 1; i > 0; i--)
-            {
+            for (int i = fishkas.Count - 1; i >= 0; i--)
                 fishkas[i].DestroyFromGamefield();
+
+            for (int i = _topPanel.FishkasPlace.Length - 1; i >= 0; i--)
+            {
+                if (_topPanel.FishkasPlace[i] != null)
+                {
+                    _topPanel.RemoveFishkaFromTopPanel(_topPanel.FishkasPlace[i], true);
+                    _topPanel.FishkasPlace[i].DestroyFromGamefield();
+                }
             }
-            onCompleate?.Invoke();
+
+            onComplete?.Invoke();
         }
 
         public void AddedFishkuOnTopPanel(FishkaOnTopPanelSignal fishkaOnTopPanel)
         {
             _topPanel.AddedFishkuOnTopPanel(fishkaOnTopPanel.Fishka, fishkaOnTopPanel.NumberPosition);
+        }
+
+        private void StopGame()
+        {
+            _reloadButton.Hide();
+            StartStopGameplay(false);
         }
 
         private void OnDisable()
