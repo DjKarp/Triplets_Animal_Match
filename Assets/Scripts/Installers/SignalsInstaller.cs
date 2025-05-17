@@ -16,6 +16,10 @@ namespace TripletsAnimalMatch
             Container
                 .DeclareSignal<StartStopGameplay>()
                 .OptionalSubscriber();
+
+            Container
+                .DeclareSignal<FishkaOnTopPanel>()
+                .OptionalSubscriber();
         }
     }
 }

@@ -44,18 +44,37 @@ namespace TripletsAnimalMatch
             _signalBus.Subscribe<StartStopGameplay>(SwitchBoolIsGameplay);
         }
 
-        public void MoveToTopPanel(Vector3 endPosition, float duration, Action action)
+        public void MoveToTopPanel(Vector3 endPosition, float duration)
         {
             _tweenSequence = DOTween.Sequence();
 
-            _tweenSequence.Append( _transform
-                .DOMove(endPosition, duration)
-                .SetEase(Ease.OutSine))
+            _tweenSequence
+                .Append(_transform.DOMove(endPosition, duration).SetEase(Ease.OutSine))
                 .Insert(0, _transform.DOScale(_scaleOnTopPanel, duration / 5))
                 .Insert(1, _transform.DORotate(Vector3.zero, duration / 5))
-                .OnComplete(() => action?.Invoke());
+                .OnComplete(() => _signalBus.Fire(new FishkaOnTopPanel()));
         }
 
+        public void MoveToFinishPlace(Vector3 finishPosition, float duration)
+        {
+            _tweenSequence = DOTween.Sequence();
+
+            _tweenSequence
+                .Append(_transform.DOMove(finishPosition, duration).SetEase(Ease.InOutElastic))
+                .Append(_transform.DOShakeScale(0.2f))
+                .Append(_transform.DOScale(Vector3.zero, duration / 5))
+                .OnComplete(() => gameObject.SetActive(false));
+        }
+
+        public void DestroyFromGamefield()
+        {
+            _tweenSequence = DOTween.Sequence();
+
+            _tweenSequence
+                .Append(_transform.DOShakeScale(UnityEngine.Random.Range(0.5f, 1.5f)))
+                .Append(_transform.DOScale(Vector3.zero, UnityEngine.Random.Range(0.5f, 1.5f)))
+                .OnComplete(() => Destroy(this));
+        }
 
         private void OnMouseDown()
         {

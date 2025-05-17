@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace TripletsAnimalMatch
     {
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private Cloud _cloud;
+        [SerializeField] private FishkiReloadButton _reloadButton;
 
         private SpawnPoint _spawnPoint;
         private GamePresenter _gamePresenter;
@@ -26,14 +28,36 @@ namespace TripletsAnimalMatch
             _signalBus = signalBus;
         }
 
-        private void Awake()
+        private void Start()
         {
-            
+            _reloadButton.Hide();
         }
 
         public void GoFishkuOnTopPanel(Fishka fishka)
         {
-            fishka.MoveToTopPanel(_topPanel.GetNextFishkaPosition(fishka), _gameplayData.TimeMoveFishkaToTopPanel);
+            Vector3 position = _topPanel.GetNextFishkaPosition(fishka);
+            if (position != Vector3.zero)
+                fishka.MoveToTopPanel(position, _gameplayData.TimeMoveFishkaToTopPanel);
+            else
+                Debug.LogError("Chech position on TopPanel! => " + fishka.gameObject.GetInstanceID());
+        }
+
+        public void GoFishkuToFinishPlace(Fishka fishka)
+        {
+            fishka.MoveToFinishPlace(_spawnPoint.Position, _gameplayData.TimeMoveFishkaToTopPanel / 2.0f);
+            _topPanel.RemoveFishkaFromTopPanel(fishka);
+        }
+
+        public void ShowScreenGameOver()
+        {
+            StartStopGameplay(false);
+            Debug.LogError("Game Over!");
+        }
+
+        public void ShowScreenWinner()
+        {
+            StartStopGameplay(false);
+            Debug.LogError("You Win!");
         }
 
         public void DropFishkiOnScene(List<Fishka> fishkas)
@@ -52,8 +76,35 @@ namespace TripletsAnimalMatch
             }
 
             _topPanel.Show();
+            _reloadButton.Show();
 
-            _signalBus.Fire(new StartStopGameplay(true));
+            StartStopGameplay(true);
+        }
+
+        private void StartStopGameplay(bool isStart)
+        {
+            _signalBus.Fire(new StartStopGameplay(isStart));
+        }
+
+        public void ReloadFishkiOnScene()
+        {
+            _reloadButton.Hide();
+            StartStopGameplay(false);
+            _gamePresenter.ReloadFishki();
+        }
+
+        public void EraseGameField(List<Fishka> fishkas, Action onCompleate)
+        {
+            for (int i = fishkas.Count - 1; i > 0; i--)
+            {
+                fishkas[i].DestroyFromGamefield();
+            }
+            onCompleate?.Invoke();
+        }
+
+        private void OnDisable()
+        {
+
         }
     }
 }

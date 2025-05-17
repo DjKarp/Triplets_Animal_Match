@@ -12,10 +12,6 @@ namespace TripletsAnimalMatch
         private GameView _gameView;
         private GameModel _gameModel;
 
-        private List<Fishka> _fishkiStart = new List<Fishka>();
-        private List<Fishka> _fishkiOnPanel = new List<Fishka>();
-        private List<Fishka> _fishkiCompleate = new List<Fishka>();
-
         [Inject]
         public void Construct(GameView gameView, GameModel gameModel, SignalBus signalBus)
         {
@@ -26,11 +22,18 @@ namespace TripletsAnimalMatch
         }
 
         public void Init()
-        {
-            _fishkiStart = _gameModel.GetCreatePoolFishek();            
-            _gameView.DropFishkiOnScene(_fishkiStart);
+        {         
+            _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek());
 
             _signalBus.Subscribe<ClickOnFishkaSignal>(OnFishkaClick);
+            _signalBus.Subscribe<FishkaOnTopPanel>(TryMatchFishikiOnTopPanel);
+        }
+
+        public void ReloadFishki()
+        {
+            int fishkiCount = _gameModel.FishkiList.Count;
+            _gameView.EraseGameField(_gameModel.FishkiList, () => _gameModel.FishkiList = new List<Fishka>());
+            _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek(fishkiCount));
         }
 
         private void OnFishkaClick(ClickOnFishkaSignal clickOnFishkaSignal)
@@ -38,19 +41,32 @@ namespace TripletsAnimalMatch
             _gameView.GoFishkuOnTopPanel(clickOnFishkaSignal.Fishka);
         }
 
-        private void TryMatchFishikiOnTopPanel()
+        private void TryMatchFishikiOnTopPanel(FishkaOnTopPanel fishkaOnTopPanel)
         {
+            var triplesMatch = _gameModel.CheckMatch();
 
+            if (triplesMatch != null)
+            {
+                foreach (Fishka fishka in triplesMatch)
+                {
+                    _gameView.GoFishkuToFinishPlace(fishka);
+                    CheckOnWin();
+                }
+            }
+
+            CheckGameOver();
         }
 
         private void CheckGameOver()
         {
-
+            if (_gameModel.IsGameOver())
+                _gameView.ShowScreenGameOver();
         }
 
         private void CheckOnWin()
         {
-
+            if (_gameModel.IsWinner())
+                _gameView.ShowScreenWinner();
         }
     }
 }

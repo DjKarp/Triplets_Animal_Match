@@ -16,5 +16,10 @@ namespace TripletsAnimalMatch
             Color = color;
             AnimalType = animalType;
         }
+
+        public string GetKey()
+        {
+            return $"{Shape}_{Color}_{AnimalType}";
+        }
     }
 }

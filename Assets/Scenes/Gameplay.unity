@@ -306,6 +306,8 @@ GameObject:
   m_Component:
   - component: {fileID: 189948162}
   - component: {fileID: 189948163}
+  - component: {fileID: 189948164}
+  - component: {fileID: 189948165}
   m_Layer: 0
   m_Name: ReloadFishkiButton
   m_TagString: Untagged
@@ -381,6 +383,39 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &189948164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189948161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fed99515e2b644f86a436aeee64c61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &189948165
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189948161}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 325fc42a9d1e06e438cd9a030f2aaf6b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &323124154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,6 +1411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _topPanel: {fileID: 1756168109}
   _cloud: {fileID: 328922227}
+  _reloadButton: {fileID: 189948164}
 --- !u!4 &772831026
 Transform:
   m_ObjectHideFlags: 0
@@ -1573,7 +1609,6 @@ GameObject:
   m_Component:
   - component: {fileID: 854536266}
   - component: {fileID: 854536267}
-  - component: {fileID: 854536268}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -1606,18 +1641,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6eba2047e8ecb345b94cd38dbba9b3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &854536268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 854536265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7c01f1b4487b5348b036d052dac736c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &937709654
@@ -1950,6 +1973,50 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1390015734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1390015735}
+  - component: {fileID: 1390015736}
+  m_Layer: 0
+  m_Name: GamePresenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1390015735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390015734}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1542548061}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1390015736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390015734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c01f1b4487b5348b036d052dac736c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1484013259
 GameObject:
   m_ObjectHideFlags: 0
@@ -2132,6 +2199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 592830588}
+  _topPanel: {fileID: 1756168109}
 --- !u!1 &1542548060
 GameObject:
   m_ObjectHideFlags: 0
@@ -2163,6 +2231,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2022616747}
+  - {fileID: 1390015735}
   m_Father: {fileID: 323124156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1542548062
@@ -2177,7 +2246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d549b72481d7098439c7ca95c05e301d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gamePresenter: {fileID: 854536268}
+  _gamePresenter: {fileID: 1390015736}
   _gameView: {fileID: 772831025}
   _gameModel: {fileID: 2022616746}
 --- !u!1 &1686648655

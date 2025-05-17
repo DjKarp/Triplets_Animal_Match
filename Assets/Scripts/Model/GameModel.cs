@@ -17,6 +17,8 @@ namespace TripletsAnimalMatch
         private Transform _transform;
 
         private List<Fishka> _createFishkiList = new List<Fishka>();
+        public List<Fishka> FishkiList { get => _createFishkiList; set => _createFishkiList = value; }
+        private Dictionary<string, List<Fishka>> _topPanelsGroup = new Dictionary<string, List<Fishka>>();
 
         [Inject]
         public void Construct(GamePresenter gamePresenter, FishkiData fishkiData, GameplayData gameplayData, TopPanel topPanel, SignalBus signalBus)
@@ -34,14 +36,14 @@ namespace TripletsAnimalMatch
             _transform = gameObject.transform;
         }
 
-        public List<Fishka> GetCreatePoolFishek()
+        public List<Fishka> GetCreatePoolFishek(int fishkiCount = 0)
         {
             _createFishkiList.Clear();
             List<Fishka> fishki = new List<Fishka>();
             Fishka fishka;
             var random = new System.Random();
 
-            List<FishkaModel> fishkaModels = new List<FishkaModel>(CreateUniqueFishkaModels());
+            List<FishkaModel> fishkaModels = new List<FishkaModel>(CreateUniqueFishkaModels(fishkiCount == 0 ? _gameplayData.FishkiMaxCountOnScene : fishkiCount));
 
             foreach (FishkaModel model in fishkaModels)
             {
@@ -60,9 +62,44 @@ namespace TripletsAnimalMatch
             return _createFishkiList;
         }
 
-        private List<FishkaModel> CreateUniqueFishkaModels()
+        public List<Fishka> CheckMatch()
         {
-            int tempUniqueFishkiCount = _gameplayData.FishkiMaxCountOnScene / _gameplayData.FishkiCountOnMatch;
+            _topPanelsGroup.Clear();
+
+            foreach (Fishka fishka in _topPanel.FishkasPlace)
+            {
+                if (fishka != null)
+                {
+                    string key = fishka.FishkaModel.GetKey();
+
+                    if (!_topPanelsGroup.ContainsKey(key))
+                        _topPanelsGroup.Add(key, new List<Fishka>());
+                    _topPanelsGroup[key].Add(fishka);
+
+                    if (_topPanelsGroup[key].Count == _gameplayData.FishkiCountOnMatch)
+                    {
+                        _createFishkiList.RemoveAll(fishkaOnList => _topPanelsGroup[key].Contains(fishkaOnList));
+                        return _topPanelsGroup[key];
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public bool IsGameOver()
+        {
+            return _topPanel.FishkasPlace.All(x => x != null);
+        }
+
+        public bool IsWinner()
+        {
+            return _topPanel.FishkasPlace.All(x => x == null) && _createFishkiList.Count == 0;
+        }
+
+        private List<FishkaModel> CreateUniqueFishkaModels(int maxFishkiCount)
+        {
+            int tempUniqueFishkiCount = maxFishkiCount / _gameplayData.FishkiCountOnMatch;
             FishkaModel fishkaModel;
             List<FishkaModel> _fishkiModels = new List<FishkaModel>();
             var random = new System.Random();
