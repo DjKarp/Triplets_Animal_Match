@@ -14,17 +14,26 @@ namespace TripletsAnimalMatch
         private GamePresenter _gamePresenter;
         private GameplayData _gameplayData;
 
+        private SignalBus _signalBus;
+
         [Inject]
-        public void Construct(GamePresenter gamePresenter, SpawnPoint spawnPoint, GameplayData gameplayData)
+        public void Construct(GamePresenter gamePresenter, SpawnPoint spawnPoint, GameplayData gameplayData, SignalBus signalBus)
         {
             _gamePresenter = gamePresenter;
             _spawnPoint = spawnPoint;
             _gameplayData = gameplayData;
+
+            _signalBus = signalBus;
         }
 
         private void Awake()
         {
             
+        }
+
+        public void GoFishkuOnTopPanel(Fishka fishka)
+        {
+            fishka.MoveToTopPanel(_topPanel.GetNextFishkaPosition(fishka), _gameplayData.TimeMoveFishkaToTopPanel);
         }
 
         public void DropFishkiOnScene(List<Fishka> fishkas)
@@ -43,6 +52,8 @@ namespace TripletsAnimalMatch
             }
 
             _topPanel.Show();
+
+            _signalBus.Fire(new StartStopGameplay(true));
         }
     }
 }

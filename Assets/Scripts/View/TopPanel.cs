@@ -9,11 +9,15 @@ namespace TripletsAnimalMatch
     public class TopPanel : EnvironmentDynamic
     {
         [SerializeField] private Transform[] _fishkiPosition = new Transform[7];
+        private List<Fishka> _fishkasPlace = new List<Fishka>();
+        public List<Fishka> FishkasPlace { get => _fishkasPlace; }
 
         protected override void Init()
         {
             HidePosition = StartPosition + new Vector3(10, 0, 0);
             Transform.position = HidePosition;
+
+            _fishkasPlace.Clear();
         }
 
         public override void Hide()
@@ -32,8 +36,11 @@ namespace TripletsAnimalMatch
                 .SetEase(Ease.OutBounce);
         }
 
-        public Vector3 GetFishkaPositionByNumber(int number)
+        public Vector3 GetNextFishkaPosition(Fishka fishka)
         {
+
+            int number = _fishkasPlace.Count;
+            _fishkasPlace.Add(fishka);
             return _fishkiPosition[number].position;
         }
     }

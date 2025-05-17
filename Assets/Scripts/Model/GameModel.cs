@@ -11,17 +11,22 @@ namespace TripletsAnimalMatch
         private GamePresenter _gamePresenter;
         private FishkiData _fishkiData;
         private GameplayData _gameplayData;
+        private TopPanel _topPanel;
+        private SignalBus _signalBus;
 
         private Transform _transform;
 
         private List<Fishka> _createFishkiList = new List<Fishka>();
 
         [Inject]
-        public void Construct(GamePresenter gamePresenter, FishkiData fishkiData, GameplayData gameplayData)
+        public void Construct(GamePresenter gamePresenter, FishkiData fishkiData, GameplayData gameplayData, TopPanel topPanel, SignalBus signalBus)
         {
             _gamePresenter = gamePresenter;
             _fishkiData = fishkiData;
-            _gameplayData = gameplayData;            
+            _gameplayData = gameplayData;
+            _topPanel = topPanel;
+
+            _signalBus = signalBus;
         }
 
         private void Awake()
@@ -44,7 +49,7 @@ namespace TripletsAnimalMatch
                 for (int i = 0; i < _gameplayData.FishkiCountOnMatch; i++)
                 {
                     fishka = Instantiate(_fishkiData.Fishka, _transform);
-                    fishka.Init(model, GetShapeSprite((int)model.Shape, (int)model.Color), _fishkiData.AnimalTexture[(int)model.AnimalType], _fishkiData.ShapesColliders[(int)model.Shape]);
+                    fishka.Init(model, GetShapeSprite((int)model.Shape, (int)model.Color), _fishkiData.AnimalTexture[(int)model.AnimalType], _fishkiData.ShapesColliders[(int)model.Shape], _signalBus);
                     fishka.gameObject.SetActive(false);
                     fishki.Add(fishka);
                 }

@@ -16,5 +16,9 @@ namespace TripletsAnimalMatch
         [SerializeField] private float _timeSpawn = 0.5f;
 
         public float TimeSpawn { get => _timeSpawn; }
+
+        [SerializeField] private float _timeMoveFishkaToTopPanel = 1.0f;
+
+        public float TimeMoveFishkaToTopPanel { get => _timeMoveFishkaToTopPanel; }
     }
 }
