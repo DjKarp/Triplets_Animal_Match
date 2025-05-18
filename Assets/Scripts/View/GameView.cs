@@ -12,6 +12,7 @@ namespace TripletsAnimalMatch
         [SerializeField] private Cloud _cloud;
         [SerializeField] private ScreenWinner _screenWinner;
         [SerializeField] private ScreenLooser _screenLooser;
+        [SerializeField] private ScreenMainMenu _screenMainMenu;
         private ReloadTilesButton _reloadButton;
 
         private SpawnPoint _spawnPoint;
@@ -37,8 +38,10 @@ namespace TripletsAnimalMatch
 
             _screenWinner.gameObject.SetActive(true);
             _screenLooser.gameObject.SetActive(true);
+            _screenMainMenu.gameObject.SetActive(true);
 
             _signalBus.Subscribe<TileOnTopPanelSignal>(AddedTileOnPanel);
+            _signalBus.Subscribe<PlayGameSignals>(HideMainMenu);
         }
 
         public void GoTileOnPanel(Tile tile)
@@ -64,6 +67,11 @@ namespace TripletsAnimalMatch
         {
             StopGame();
             _screenWinner.Show();
+        }
+
+        public void HideMainMenu(PlayGameSignals playGameSignals)
+        {
+            _screenMainMenu.Hide();
         }
 
         public void DropTileOnScene(List<Tile> tiles, bool isStart = true)
@@ -131,11 +139,6 @@ namespace TripletsAnimalMatch
         {
             _reloadButton.Hide();
             StartStopGameplay(false);
-        }
-
-        private void OnDisable()
-        {
-
         }
     }
 }

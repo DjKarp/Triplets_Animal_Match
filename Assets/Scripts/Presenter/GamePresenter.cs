@@ -69,11 +69,11 @@ namespace TripletsAnimalMatch
                 foreach (Tile tile in triplesMatch)
                 {
                     _gameView.GoTileToFinish(tile);
-                    CheckOnWin();
                 }
             }
 
-            CheckGameOver();
+            if (CheckOnWin() == false)
+                CheckGameOver();
         }
 
         private void CheckGameOver()
@@ -85,10 +85,17 @@ namespace TripletsAnimalMatch
             }
         }
 
-        private void CheckOnWin()
+        private bool CheckOnWin()
         {
             if (_gameModel.IsWinner())
+            {
                 _gameView.ShowScreenWinner();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
