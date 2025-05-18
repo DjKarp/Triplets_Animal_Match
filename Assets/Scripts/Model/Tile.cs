@@ -1,23 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Zenject;
-using System;
 
 namespace TripletsAnimalMatch
 {
-    public class Fishka : MonoBehaviour
+    public class Tile : MonoBehaviour
     {
-        private FishkaModel _fishkaModel;
+        private TileModel _tileModel;
 
-        public FishkaModel FishkaModel { get => _fishkaModel; }
+        public TileModel TileModel { get => _tileModel; }
 
         private Transform _transform;
         public Transform Transform { get => _transform; }
 
-        private int _numberPositionOnTopPanel;
-        public int NumberPositionOnTopPanel { set => _numberPositionOnTopPanel = value; }
+        private int _topPanelSlotIndex;
+        public int TopPanelSlotIndex { set => _topPanelSlotIndex = value; }
 
         [SerializeField] private SpriteRenderer _shapeSprite;
         [SerializeField] private SpriteRenderer _animalsSprite;
@@ -29,13 +26,13 @@ namespace TripletsAnimalMatch
         private Sequence _tweenSequence;
         private SignalBus _signalBus;
 
-        private bool _isGameplayOn = false;
+        private bool _isGameplayActive = false;
 
         private Vector3 _scaleOnTopPanel = new Vector3(0.9f, 0.9f, 0.9f);
 
-        public void Init(FishkaModel fishkaModel, Sprite shape, Sprite animals, GameObject collider, SignalBus signalBus)
+        public void Init(TileModel tileModel, Sprite shape, Sprite animals, GameObject collider, SignalBus signalBus)
         {
-            _fishkaModel = fishkaModel;
+            _tileModel = tileModel;
             _shapeSprite.sprite = shape;
             _animalsSprite.sprite = animals;
             _colliderGO = Instantiate(collider, _colliderPosition);
@@ -44,7 +41,7 @@ namespace TripletsAnimalMatch
             _transform = gameObject.transform;
             _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 
-            _signalBus.Subscribe<StartStopGameplaySignal>(SwitchBoolIsGameplay);
+            _signalBus.Subscribe<IsGameplayActiveSignal>(SwitchBoolIsGameplay);
         }
 
         public void MoveToTopPanel(Vector3 endPosition, float duration)
@@ -55,10 +52,10 @@ namespace TripletsAnimalMatch
                 .Append(_transform.DOMove(endPosition, duration).SetEase(Ease.OutSine))
                 .Insert(0, _transform.DOScale(_scaleOnTopPanel, duration / 5))
                 .Insert(1, _transform.DORotate(Vector3.zero, duration / 5))
-                .OnComplete(() => _signalBus.Fire(new FishkaOnTopPanelSignal(this, _numberPositionOnTopPanel)));
+                .OnComplete(() => _signalBus.Fire(new TileOnTopPanelSignal(this, _topPanelSlotIndex)));
         }
 
-        public void MoveToFinishPlace(Vector3 finishPosition, float duration)
+        public void MoveToFinish(Vector3 finishPosition, float duration)
         {
             _tweenSequence = DOTween.Sequence();
 
@@ -81,9 +78,9 @@ namespace TripletsAnimalMatch
 
         private void OnMouseDown()
         {
-            if (_isGameplayOn)
+            if (_isGameplayActive)
             {
-                _signalBus.Fire(new ClickOnFishkaSignal(this));
+                _signalBus.Fire(new ClickOnTileSignal(this));
                 SwitchOffRigidbodyAndCollider();
             }
         }
@@ -96,9 +93,9 @@ namespace TripletsAnimalMatch
             _animalsSprite.sortingOrder++;
         }
 
-        private void SwitchBoolIsGameplay(StartStopGameplaySignal startStopGameplay)
+        private void SwitchBoolIsGameplay(IsGameplayActiveSignal startStopGameplay)
         {
-            _isGameplayOn = startStopGameplay.IsStart;
+            _isGameplayActive = startStopGameplay.IsActive;
         }
 
         private void OnDisable()

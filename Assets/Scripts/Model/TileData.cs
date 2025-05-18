@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace TripletsAnimalMatch
 {
-    public class FishkiData : MonoBehaviour
+    public class TileData : MonoBehaviour
     {
         public enum Shape 
         { 
@@ -49,7 +48,7 @@ namespace TripletsAnimalMatch
 
         public List<GameObject> ShapesColliders = new List<GameObject>();
 
-        public Fishka Fishka;
+        public Tile Tile;
 
     }
 }

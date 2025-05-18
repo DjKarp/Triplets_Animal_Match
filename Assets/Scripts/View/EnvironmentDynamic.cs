@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using DG.Tweening;
-using System;
 
 namespace TripletsAnimalMatch
 {

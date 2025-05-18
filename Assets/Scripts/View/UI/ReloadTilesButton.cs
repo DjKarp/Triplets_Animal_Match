@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -6,7 +5,7 @@ using DG.Tweening;
 
 namespace TripletsAnimalMatch
 {
-    public class FishkiReloadButton : MonoBehaviour
+    public class ReloadTilesButton : MonoBehaviour
     {
         private GameView _gameView;
         private List<SpriteRenderer> _spriteRenderers;
@@ -46,10 +45,10 @@ namespace TripletsAnimalMatch
             _animator.SetTrigger("isClick");            
         }
 
-        // Call from Animations
+        // Call from Animations, for Example
         public void ButtonClick()
         {
-            _gameView.ReloadFishkiOnScene();
+            _gameView.ReloadTiles();
         }
     }
 }

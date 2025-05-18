@@ -23,46 +23,46 @@ namespace TripletsAnimalMatch
 
         public void Init()
         {         
-            _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek());
+            _gameView.DropTileOnScene(_gameModel.CreateTiles());
 
-            _signalBus.Subscribe<ClickOnFishkaSignal>(OnFishkaClick);
-            _signalBus.Subscribe<FishkaOnTopPanelSignal>(TryMatchFishikiOnTopPanel);
+            _signalBus.Subscribe<ClickOnTileSignal>(OnTileClick);
+            _signalBus.Subscribe<TileOnTopPanelSignal>(TryMatchTilesOnPanel);
         }
 
-        public void ReloadFishki()
+        public void ReloadTiles()
         {           
-            StartCoroutine(WaitBeforeDrop(_gameModel.GetCountFishkiOnGameplace()));
+            StartCoroutine(WaitBeforeDrop(_gameModel.GetTilesCount()));
         }
 
         private IEnumerator WaitBeforeDrop(int count)
         {
-            while(!_gameModel.IsAllMoveFishkiOnTopPanel())
+            while(!_gameModel.IsAllClickedTileMoveOnPanel())
             {
                 yield return new WaitForEndOfFrame();
             }
 
-            _gameView.EraseGameField(_gameModel.FishkiList, () => _gameModel.FishkiList = new List<Fishka>());
+            _gameView.EraseGameField(_gameModel.ActiveTiles, () => _gameModel.ActiveTiles = new List<Tile>());
 
             yield return new WaitForSeconds(1.0f);
 
-            _gameView.DropFishkiOnScene(_gameModel.GetCreatePoolFishek(count), false);
+            _gameView.DropTileOnScene(_gameModel.CreateTiles(count), false);
         }
 
-        private void OnFishkaClick(ClickOnFishkaSignal clickOnFishkaSignal)
+        private void OnTileClick(ClickOnTileSignal clickOnTileSignal)
         {
-            _gameModel.RemoveFishkaFromGameplace(clickOnFishkaSignal.Fishka);
-            _gameView.GoFishkuOnTopPanel(clickOnFishkaSignal.Fishka);
+            _gameModel.RemoveTileFromListActiveTiles(clickOnTileSignal.Tile);
+            _gameView.GoTileOnPanel(clickOnTileSignal.Tile);
         }
 
-        private void TryMatchFishikiOnTopPanel(FishkaOnTopPanelSignal fishkaOnTopPanel)
+        private void TryMatchTilesOnPanel(TileOnTopPanelSignal tileOnTopPanelSignal)
         {
             var triplesMatch = _gameModel.CheckMatch();
 
             if (triplesMatch != null)
             {
-                foreach (Fishka fishka in triplesMatch)
+                foreach (Tile tile in triplesMatch)
                 {
-                    _gameView.GoFishkuToFinishPlace(fishka);
+                    _gameView.GoTileToFinish(tile);
                     CheckOnWin();
                 }
             }

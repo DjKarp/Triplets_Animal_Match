@@ -5,12 +5,12 @@ namespace TripletsAnimalMatch
 {
     public class UiInstaller : MonoInstaller
     {
-        [SerializeField] private FishkiReloadButton _fishkiReloadButton;    
+        [SerializeField] private ReloadTilesButton _reloadTilesButton;    
         public override void InstallBindings()
         {
             Container
-                .Bind<FishkiReloadButton>()
-                .FromInstance(_fishkiReloadButton)
+                .Bind<ReloadTilesButton>()
+                .FromInstance(_reloadTilesButton)
                 .AsSingle();
         }
     }

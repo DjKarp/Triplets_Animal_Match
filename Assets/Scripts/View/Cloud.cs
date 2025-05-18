@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
@@ -47,7 +45,7 @@ namespace TripletsAnimalMatch
         public void StartShake()
         {
             Tween = Transform
-                .DOShakePosition(_gameplayData.FishkiMaxCountOnScene * _gameplayData.TimeSpawn, strength: 0.3f, vibrato: 2);
+                .DOShakePosition(_gameplayData.MaxCountTiles * _gameplayData.TimeSpawn, strength: 0.3f, vibrato: 2);
         }
 
         public void StopShake()

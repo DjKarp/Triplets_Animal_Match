@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,22 +8,22 @@ namespace TripletsAnimalMatch
     public class GameModel : MonoBehaviour
     {
         private GamePresenter _gamePresenter;
-        private FishkiData _fishkiData;
+        private TileData _tileData;
         private GameplayData _gameplayData;
         private TopPanel _topPanel;
         private SignalBus _signalBus;
 
         private Transform _transform;
 
-        private List<Fishka> _createFishkiList = new List<Fishka>();
-        public List<Fishka> FishkiList { get => _createFishkiList; set => _createFishkiList = value; }
-        private Dictionary<string, List<Fishka>> _topPanelsGroup = new Dictionary<string, List<Fishka>>();
+        private List<Tile> _activeTiles = new List<Tile>();
+        public List<Tile> ActiveTiles { get => _activeTiles; set => _activeTiles = value; }
+        private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();
 
         [Inject]
-        public void Construct(GamePresenter gamePresenter, FishkiData fishkiData, GameplayData gameplayData, TopPanel topPanel, SignalBus signalBus)
+        public void Construct(GamePresenter gamePresenter, TileData tileData, GameplayData gameplayData, TopPanel topPanel, SignalBus signalBus)
         {
             _gamePresenter = gamePresenter;
-            _fishkiData = fishkiData;
+            _tileData = tileData;
             _gameplayData = gameplayData;
             _topPanel = topPanel;
 
@@ -36,49 +35,59 @@ namespace TripletsAnimalMatch
             _transform = gameObject.transform;
         }
 
-        public List<Fishka> GetCreatePoolFishek(int fishkiCount = 0)
+        public bool IsGameOver()
         {
-            _createFishkiList.Clear();
-            List<Fishka> fishki = new List<Fishka>();
-            Fishka fishka;
+            return _topPanel.TilesContainer.All(x => x != null);
+        }
+
+        public bool IsWinner()
+        {
+            return _topPanel.TilesContainer.All(x => x == null) && _activeTiles.Count == 0;
+        }
+
+        public List<Tile> CreateTiles(int tilesCount = 0)
+        {
+            _activeTiles.Clear();
+            List<Tile> tiles = new List<Tile>();
+            Tile tile;
             var random = new System.Random();
 
-            List<FishkaModel> fishkaModels = new List<FishkaModel>(CreateUniqueFishkaModels(fishkiCount == 0 ? _gameplayData.FishkiMaxCountOnScene : fishkiCount));
+            List<TileModel> tileModels = new List<TileModel>(CreateUniqueTileModels(tilesCount == 0 ? _gameplayData.MaxCountTiles : tilesCount));
 
-            foreach (FishkaModel model in fishkaModels)
+            foreach (TileModel model in tileModels)
             {
-                fishka = null;
-                for (int i = 0; i < _gameplayData.FishkiCountOnMatch; i++)
+                tile = null;
+                for (int i = 0; i < _gameplayData.MatchCountTiles; i++)
                 {
-                    fishka = Instantiate(_fishkiData.Fishka, _transform);
-                    fishka.Init(model, GetShapeSprite((int)model.Shape, (int)model.Color), _fishkiData.AnimalTexture[(int)model.AnimalType], _fishkiData.ShapesColliders[(int)model.Shape], _signalBus);
-                    fishka.gameObject.SetActive(false);
-                    fishki.Add(fishka);
+                    tile = Instantiate(_tileData.Tile, _transform);
+                    tile.Init(model, GetShapeSprite((int)model.Shape, (int)model.Color), _tileData.AnimalTexture[(int)model.AnimalType], _tileData.ShapesColliders[(int)model.Shape], _signalBus);
+                    tile.gameObject.SetActive(false);
+                    tiles.Add(tile);
                 }
             }
 
-            _createFishkiList = fishki.OrderBy(_ => random.Next()).ToList();
+            _activeTiles = tiles.OrderBy(_ => random.Next()).ToList();
 
-            return _createFishkiList;
+            return _activeTiles;
         }
 
-        public List<Fishka> CheckMatch()
+        public List<Tile> CheckMatch()
         {
             _topPanelsGroup.Clear();
 
-            foreach (Fishka fishka in _topPanel.FishkasPlace)
+            foreach (Tile tile in _topPanel.TilesContainer)
             {
-                if (fishka != null)
+                if (tile != null)
                 {
-                    string key = fishka.FishkaModel.GetKey();
+                    string key = tile.TileModel.GetKey();
 
                     if (!_topPanelsGroup.ContainsKey(key))
-                        _topPanelsGroup.Add(key, new List<Fishka>());
-                    _topPanelsGroup[key].Add(fishka);
+                        _topPanelsGroup.Add(key, new List<Tile>());
+                    _topPanelsGroup[key].Add(tile);
 
-                    if (_topPanelsGroup[key].Count == _gameplayData.FishkiCountOnMatch)
+                    if (_topPanelsGroup[key].Count == _gameplayData.MatchCountTiles)
                     {
-                        _createFishkiList.RemoveAll(fishkaOnList => _topPanelsGroup[key].Contains(fishkaOnList));
+                        _activeTiles.RemoveAll(tile => _topPanelsGroup[key].Contains(tile));
                         return _topPanelsGroup[key];
                     }
                 }
@@ -87,53 +96,43 @@ namespace TripletsAnimalMatch
             return null;
         }
 
-        public void RemoveFishkaFromGameplace(Fishka fishka)
+        public void RemoveTileFromListActiveTiles(Tile tile)
         {
-            _createFishkiList.Remove(fishka);
+            _activeTiles.Remove(tile);
+        }        
+
+        public int GetTilesCount()
+        {
+            return _activeTiles.Count + _topPanel.PlaceUseCount;
         }
 
-        public bool IsGameOver()
+        public bool IsAllClickedTileMoveOnPanel()
         {
-            return _topPanel.FishkasPlace.All(x => x != null);
+            return _topPanel.IsAllClickedTileMoveOnPanel();
         }
 
-        public bool IsWinner()
+        private List<TileModel> CreateUniqueTileModels(int maxTilesCount)
         {
-            return _topPanel.FishkasPlace.All(x => x == null) && _createFishkiList.Count == 0;
-        }
-
-        public int GetCountFishkiOnGameplace()
-        {
-            return _createFishkiList.Count + _topPanel.CountFishki;
-        }
-
-        public bool IsAllMoveFishkiOnTopPanel()
-        {
-            return _topPanel.IsAllMoveFishkiOnTopPanel();
-        }
-
-        private List<FishkaModel> CreateUniqueFishkaModels(int maxFishkiCount)
-        {
-            int tempUniqueFishkiCount = maxFishkiCount / _gameplayData.FishkiCountOnMatch;
-            FishkaModel fishkaModel;
-            List<FishkaModel> _fishkiModels = new List<FishkaModel>();
+            int tempUniqueTilesCount = maxTilesCount / _gameplayData.MatchCountTiles;
+            TileModel tileModel;
+            List<TileModel> _tileModels = new List<TileModel>();
             var random = new System.Random();
 
-            for (int i = 0; i < tempUniqueFishkiCount; i++)
+            for (int i = 0; i < tempUniqueTilesCount; i++)
             {
                 do
                 {
-                    fishkaModel = new FishkaModel(
-                        (FishkiData.Shape)random.Next(0, System.Enum.GetNames(typeof(FishkiData.Shape)).Length),
-                        (FishkiData.Color)random.Next(0, System.Enum.GetNames(typeof(FishkiData.Color)).Length),
-                        (FishkiData.AnimalType)random.Next(0, System.Enum.GetNames(typeof(FishkiData.AnimalType)).Length));
+                    tileModel = new TileModel(
+                        (TileData.Shape)random.Next(0, System.Enum.GetNames(typeof(TileData.Shape)).Length),
+                        (TileData.Color)random.Next(0, System.Enum.GetNames(typeof(TileData.Color)).Length),
+                        (TileData.AnimalType)random.Next(0, System.Enum.GetNames(typeof(TileData.AnimalType)).Length));
                 }
-                while (_fishkiModels.Contains(fishkaModel));
+                while (_tileModels.Contains(tileModel));
                 
-                _fishkiModels.Add(fishkaModel);
+                _tileModels.Add(tileModel);
             }
 
-            return _fishkiModels;
+            return _tileModels;
         }        
 
         private Sprite GetShapeSprite(int shapeNumber, int colorNumber)
@@ -142,16 +141,16 @@ namespace TripletsAnimalMatch
             {
                 default:
                 case 0:
-                    return _fishkiData.ShapesCircle[colorNumber];
+                    return _tileData.ShapesCircle[colorNumber];
 
                 case 1:
-                    return _fishkiData.ShapesHexagon[colorNumber];
+                    return _tileData.ShapesHexagon[colorNumber];
 
                 case 2:
-                    return _fishkiData.ShapesPentagon[colorNumber];
+                    return _tileData.ShapesPentagon[colorNumber];
 
                 case 3:
-                    return _fishkiData.ShapesRectangle[colorNumber];
+                    return _tileData.ShapesRectangle[colorNumber];
             }
         }
     }

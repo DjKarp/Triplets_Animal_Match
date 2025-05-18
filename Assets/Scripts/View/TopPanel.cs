@@ -1,26 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
 using System;
 using System.Linq;
+using UnityEngine;
+using DG.Tweening;
+
 
 namespace TripletsAnimalMatch
 {
     public class TopPanel : EnvironmentDynamic
     {
-        [SerializeField] private Transform[] _fishkiPosition = new Transform[7];
-        private Fishka[] _fishkasPlace;
-        public Fishka[] FishkasPlace { get => _fishkasPlace; }
+        [SerializeField] private Transform[] _tilesPositionContainer = new Transform[7];
+        private Tile[] _tilesContainer;
+        public Tile[] TilesContainer { get => _tilesContainer; }
 
-        private bool[] _placeUse;
+        private bool[] _placesUse;
 
-        public int CountFishki { get => _placeUse.Count(x => x == true); }
+        public int PlaceUseCount { get => _placesUse.Count(x => x == true); }
 
         protected override void Init()
         {
-            _fishkasPlace = new Fishka[7];
-            _placeUse = new bool[7];
+            _tilesContainer = new Tile[7];
+            _placesUse = new bool[7];
 
             HidePosition = StartPosition + new Vector3(10, 0, 0);
             Transform.position = HidePosition;
@@ -42,43 +41,43 @@ namespace TripletsAnimalMatch
                 .SetEase(Ease.OutBounce);
         }
 
-        public Vector3 GetNextFishkaPosition(Fishka fishka)
+        public Vector3 GetNextTilePosition(Tile tile)
         {
-            for (int i = 0; i < _fishkasPlace.Length; i++)
+            for (int i = 0; i < _tilesContainer.Length; i++)
             {
-                if (!_placeUse[i])
+                if (_placesUse[i] == false)
                 {
-                    fishka.NumberPositionOnTopPanel = i;
-                    _placeUse[i] = true;
-                    return _fishkiPosition[i].position;
+                    tile.TopPanelSlotIndex = i;
+                    _placesUse[i] = true;
+                    return _tilesPositionContainer[i].position;
                 }
             }
 
             return Vector3.zero;
         }
 
-        public void RemoveFishkaFromTopPanel(Fishka fishka, bool isDestroy = false)
+        public void RemoveTileFromPanel(Tile tile, bool isDestroy = false)
         {
-            for (int i = 0; i < _fishkasPlace.Length; i++)
-                if (_fishkasPlace[i] == fishka)
+            for (int i = 0; i < _tilesContainer.Length; i++)
+                if (_tilesContainer[i] == tile)
                 {
                     if (isDestroy)
-                        _fishkasPlace[i].DestroyFromGamefield();
+                        _tilesContainer[i].DestroyFromGamefield();
                     else
-                        _fishkasPlace[i] = null;
+                        _tilesContainer[i] = null;
 
-                    _placeUse[i] = false;
+                    _placesUse[i] = false;
                 }
         }
 
-        public void AddedFishkuOnTopPanel(Fishka fishka, int number)
+        public void AddedTileOnPanel(Tile tile, int number)
         {
-            _fishkasPlace[number] = fishka;
+            _tilesContainer[number] = tile;
         }
 
-        public bool IsAllMoveFishkiOnTopPanel()
+        public bool IsAllClickedTileMoveOnPanel()
         {
-            return _fishkasPlace.Count(x => x != null) == _placeUse.Count(x => x == true);
+            return _tilesContainer.Count(x => x != null) == _placesUse.Count(x => x == true);
         }
     }
 }

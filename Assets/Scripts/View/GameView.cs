@@ -12,7 +12,7 @@ namespace TripletsAnimalMatch
         [SerializeField] private Cloud _cloud;
         [SerializeField] private ScreenWinner _screenWinner;
         [SerializeField] private ScreenLooser _screenLooser;
-        private FishkiReloadButton _reloadButton;
+        private ReloadTilesButton _reloadButton;
 
         private SpawnPoint _spawnPoint;
         private GamePresenter _gamePresenter;
@@ -21,12 +21,12 @@ namespace TripletsAnimalMatch
         private SignalBus _signalBus;
 
         [Inject]
-        public void Construct(GamePresenter gamePresenter, SpawnPoint spawnPoint, GameplayData gameplayData, SignalBus signalBus, FishkiReloadButton fishkiReloadButton)
+        public void Construct(GamePresenter gamePresenter, SpawnPoint spawnPoint, GameplayData gameplayData, SignalBus signalBus, ReloadTilesButton reloadTilesButton)
         {
             _gamePresenter = gamePresenter;
             _spawnPoint = spawnPoint;
             _gameplayData = gameplayData;
-            _reloadButton = fishkiReloadButton;
+            _reloadButton = reloadTilesButton;
 
             _signalBus = signalBus;
         }
@@ -38,20 +38,20 @@ namespace TripletsAnimalMatch
             _screenWinner.gameObject.SetActive(true);
             _screenLooser.gameObject.SetActive(true);
 
-            _signalBus.Subscribe<FishkaOnTopPanelSignal>(AddedFishkuOnTopPanel);
+            _signalBus.Subscribe<TileOnTopPanelSignal>(AddedTileOnPanel);
         }
 
-        public void GoFishkuOnTopPanel(Fishka fishka)
+        public void GoTileOnPanel(Tile tile)
         {
-            Vector3 position = _topPanel.GetNextFishkaPosition(fishka);
+            Vector3 position = _topPanel.GetNextTilePosition(tile);
             if (position != Vector3.zero)
-                fishka.MoveToTopPanel(position, _gameplayData.TimeMoveFishkaToTopPanel);
+                tile.MoveToTopPanel(position, _gameplayData.MoveTileTime);
         }
 
-        public void GoFishkuToFinishPlace(Fishka fishka)
+        public void GoTileToFinish(Tile tile)
         {
-            fishka.MoveToFinishPlace(_spawnPoint.Position, _gameplayData.TimeMoveFishkaToTopPanel / 2.0f);
-            _topPanel.RemoveFishkaFromTopPanel(fishka);
+            tile.MoveToFinish(_spawnPoint.Position, _gameplayData.MoveTileTime / 2.0f);
+            _topPanel.RemoveTileFromPanel(tile);
         }
 
         public void ShowScreenGameOver()
@@ -66,17 +66,17 @@ namespace TripletsAnimalMatch
             _screenWinner.Show();
         }
 
-        public void DropFishkiOnScene(List<Fishka> fishkas, bool isStart = true)
+        public void DropTileOnScene(List<Tile> tiles, bool isStart = true)
         {
-            _cloud.Show(() => StartCoroutine(DropFishkiOnTime(fishkas, isStart)));
+            _cloud.Show(() => StartCoroutine(DropTileWhitDelay(tiles, isStart)));
         }
 
-        private IEnumerator DropFishkiOnTime(List<Fishka> fishkas, bool isStart = true)
+        private IEnumerator DropTileWhitDelay(List<Tile> tiles, bool isStart = true)
         {
-            foreach (Fishka fishka in fishkas)
+            foreach (Tile tile in tiles)
             {
-                fishka.Transform.position = _spawnPoint.Position;
-                fishka.gameObject.SetActive(true);
+                tile.Transform.position = _spawnPoint.Position;
+                tile.gameObject.SetActive(true);
 
                 yield return new WaitForSeconds(_gameplayData.TimeSpawn);
             }
@@ -90,36 +90,36 @@ namespace TripletsAnimalMatch
 
         private void StartStopGameplay(bool isStart)
         {
-            _signalBus.Fire(new StartStopGameplaySignal(isStart));
+            _signalBus.Fire(new IsGameplayActiveSignal(isStart));
         }
 
-        public void ReloadFishkiOnScene()
+        public void ReloadTiles()
         {
             _reloadButton.Hide();
             StartStopGameplay(false);
-            _gamePresenter.ReloadFishki();
+            _gamePresenter.ReloadTiles();
         }
 
-        public void EraseGameField(List<Fishka> fishkas, Action onComplete)
+        public void EraseGameField(List<Tile> tiles, Action onComplete)
         {
-            for (int i = fishkas.Count - 1; i >= 0; i--)
-                fishkas[i].DestroyFromGamefield();
+            for (int i = tiles.Count - 1; i >= 0; i--)
+                tiles[i].DestroyFromGamefield();
 
-            for (int i = _topPanel.FishkasPlace.Length - 1; i >= 0; i--)
+            for (int i = _topPanel.TilesContainer.Length - 1; i >= 0; i--)
             {
-                if (_topPanel.FishkasPlace[i] != null)
+                if (_topPanel.TilesContainer[i] != null)
                 {
-                    _topPanel.RemoveFishkaFromTopPanel(_topPanel.FishkasPlace[i], true);
-                    _topPanel.FishkasPlace[i].DestroyFromGamefield();
+                    _topPanel.RemoveTileFromPanel(_topPanel.TilesContainer[i], true);
+                    _topPanel.TilesContainer[i].DestroyFromGamefield();
                 }
             }
 
             onComplete?.Invoke();
         }
 
-        public void AddedFishkuOnTopPanel(FishkaOnTopPanelSignal fishkaOnTopPanel)
+        public void AddedTileOnPanel(TileOnTopPanelSignal tileOnTopPanelSignal)
         {
-            _topPanel.AddedFishkuOnTopPanel(fishkaOnTopPanel.Fishka, fishkaOnTopPanel.NumberPosition);
+            _topPanel.AddedTileOnPanel(tileOnTopPanelSignal.Tile, tileOnTopPanelSignal.NumberPosition);
         }
 
         private void StopGame()

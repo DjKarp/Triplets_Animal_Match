@@ -10,15 +10,15 @@ namespace TripletsAnimalMatch
             SignalBusInstaller.Install(Container);
 
             Container
-                .DeclareSignal<ClickOnFishkaSignal>()
+                .DeclareSignal<ClickOnTileSignal>()
                 .OptionalSubscriber();
 
             Container
-                .DeclareSignal<StartStopGameplaySignal>()
+                .DeclareSignal<IsGameplayActiveSignal>()
                 .OptionalSubscriber();
 
             Container
-                .DeclareSignal<FishkaOnTopPanelSignal>()
+                .DeclareSignal<TileOnTopPanelSignal>()
                 .OptionalSubscriber();
         }
     }

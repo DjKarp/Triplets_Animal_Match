@@ -5,7 +5,7 @@ namespace TripletsAnimalMatch
 {
     public class DataInstaller : MonoInstaller
     {
-        [SerializeField] private FishkiData _fishkiData;
+        [SerializeField] private TileData _tileData;
         [SerializeField] private GameplayData _gameplayData;
 
         public override void InstallBindings()
@@ -16,8 +16,8 @@ namespace TripletsAnimalMatch
                 .AsCached();
 
             Container
-                .Bind<FishkiData>()
-                .FromInstance(_fishkiData)
+                .Bind<TileData>()
+                .FromInstance(_tileData)
                 .AsCached();
         }
     }

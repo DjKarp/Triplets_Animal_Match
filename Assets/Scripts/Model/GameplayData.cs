@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace TripletsAnimalMatch
@@ -8,10 +6,10 @@ namespace TripletsAnimalMatch
     {
         [SerializeField] GameplayDataSO _gameplayDataSO;
 
-        public int FishkiMaxCountOnScene { get => _gameplayDataSO.FishkiMaxCountOnScene; }
-        public int FishkiCountOnMatch { get => _gameplayDataSO.FishkiCountOnMatch; }
+        public int MaxCountTiles { get => _gameplayDataSO.MaxCountTiles; }
+        public int MatchCountTiles { get => _gameplayDataSO.MatchCountTiles; }
         public float TimeSpawn { get => _gameplayDataSO.TimeSpawn; }
 
-        public float TimeMoveFishkaToTopPanel { get => _gameplayDataSO.TimeMoveFishkaToTopPanel; }
+        public float MoveTileTime { get => _gameplayDataSO.MoveTileTime; }
     }
 }
