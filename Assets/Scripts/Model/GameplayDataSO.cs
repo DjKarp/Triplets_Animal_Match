@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TripletsAnimalMatch
@@ -19,5 +20,16 @@ namespace TripletsAnimalMatch
 
         [SerializeField] private float _moveTileTime = 1.0f;
         public float MoveTileTime { get => _moveTileTime; }
+
+
+        [SerializeField] private int _maxStickTiles = 2;
+        public float MaxStickTiles { get => _maxStickTiles; }
+
+
+        [SerializeField] private int _numberTilesToUnfreeze = 5;
+        public float NumberTilesToUnfreeze { get => _numberTilesToUnfreeze; }
+
+
+        public List<TileEffectCount> TileEffectCount;
     }
 }

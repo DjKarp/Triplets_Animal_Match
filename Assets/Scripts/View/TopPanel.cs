@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-
 
 namespace TripletsAnimalMatch
 {
@@ -79,6 +79,6 @@ namespace TripletsAnimalMatch
         public bool IsAllClickedTileMoveOnPanel()
         {
             return _tilesContainer.Count(x => x != null) == _placesUse.Count(x => x == true);
-        }
+        }        
     }
 }

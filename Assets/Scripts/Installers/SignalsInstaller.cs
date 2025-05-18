@@ -20,6 +20,10 @@ namespace TripletsAnimalMatch
             Container
                 .DeclareSignal<TileOnTopPanelSignal>()
                 .OptionalSubscriber();
+
+            Container
+                .DeclareSignal<TileOnFinishSignal>()
+                .OptionalSubscriber();
         }
     }
 }

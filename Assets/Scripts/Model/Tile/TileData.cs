@@ -18,7 +18,6 @@ namespace TripletsAnimalMatch
             Blue,
             Gray,            
             Green,
-            Pink,
             Purple,
             Red,
             Turquoise,
@@ -36,6 +35,15 @@ namespace TripletsAnimalMatch
             Rat
         }
 
+        public enum TileEffect
+        {
+            None,
+            Heavy,
+            Sticky,
+            Exploding,
+            Frozen
+        }
+
         public List<Sprite> ShapesCircle = new List<Sprite>();
 
         public List<Sprite> ShapesHexagon = new List<Sprite>();
@@ -49,6 +57,7 @@ namespace TripletsAnimalMatch
         public List<GameObject> ShapesColliders = new List<GameObject>();
 
         public Tile Tile;
+        public List<TilePrefabByEffect> TilePrefabByEffects = new List<TilePrefabByEffect>();
 
     }
 }

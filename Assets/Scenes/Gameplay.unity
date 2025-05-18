@@ -241,7 +241,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2165,7 +2165,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2249,7 +2249,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2377,7 +2377,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2549,7 +2549,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0ac4850744377644c89ef895990d7d82, type: 3}
   - {fileID: 21300000, guid: bc4e66a2a5d23f94e8211303f9b218a7, type: 3}
   - {fileID: 21300000, guid: ef686ed6dcdae8c4a9fcc2b1f3293686, type: 3}
-  - {fileID: 21300000, guid: f32eb7e6ecf7cb144970d35ef562f3fa, type: 3}
   - {fileID: 21300000, guid: 70f6efb0ce9ff884e939a2c3c67237fe, type: 3}
   - {fileID: 21300000, guid: adf787269186c84448974fa2b38355cb, type: 3}
   - {fileID: 21300000, guid: f5401db43471bc64592ba4013fbd7322, type: 3}
@@ -2558,7 +2557,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 738ab9fcc245cf24397416d49dfa7b52, type: 3}
   - {fileID: 21300000, guid: 4581eff67ccb37d4880042f85cf59745, type: 3}
   - {fileID: 21300000, guid: f7c7a5846a427a54fa729610880f3a2a, type: 3}
-  - {fileID: 21300000, guid: f35d399e34f8ba14d9941eb0d6e3f8c0, type: 3}
   - {fileID: 21300000, guid: b49fa53bc55c92847bb67e4967f1fa89, type: 3}
   - {fileID: 21300000, guid: 665f60cd11cd0c74e884f7e266543570, type: 3}
   - {fileID: 21300000, guid: f09225168d6b593408a814d25bd28f85, type: 3}
@@ -2567,7 +2565,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: bf954b481c0c3f84daa6243d26c58a0a, type: 3}
   - {fileID: 21300000, guid: 10a329b996b6a6c4ead8ae3dcca58530, type: 3}
   - {fileID: 21300000, guid: b291e0ef298b16841acea55dbee9fa77, type: 3}
-  - {fileID: 21300000, guid: a4598592c386e8747a63be109a0b3652, type: 3}
   - {fileID: 21300000, guid: 6b07fd5a615a4c148bb20ae48504403b, type: 3}
   - {fileID: 21300000, guid: 43316454c1ad72e40bce502ef98530e5, type: 3}
   - {fileID: 21300000, guid: efbcc44a5284cd346abe0bcce1bd8d1d, type: 3}
@@ -2576,7 +2573,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ac3fbe087493c664588ed374c6bc3914, type: 3}
   - {fileID: 21300000, guid: 82570c4b8dca7094da5070b31c119a4f, type: 3}
   - {fileID: 21300000, guid: b4c15ee1bda12ae4a8ef2132655abebd, type: 3}
-  - {fileID: 21300000, guid: 8f19db19ad8d6394ca868606c6fc35de, type: 3}
   - {fileID: 21300000, guid: f1f817ebdf3b4384885f8b10e9719a2a, type: 3}
   - {fileID: 21300000, guid: 6ed7a18c033794246af6a6c8b07454d7, type: 3}
   - {fileID: 21300000, guid: 87f74cbb77b9d65478e5118bfb2f2bd7, type: 3}
@@ -2596,6 +2592,15 @@ MonoBehaviour:
   - {fileID: 6513300622107302300, guid: 28de2174419c45a4bb574df1efc3d820, type: 3}
   - {fileID: 4448874946265232094, guid: dac00b8b5e065a149af23a127d768dd6, type: 3}
   Tile: {fileID: 3088144994076575730, guid: bd320d9f86fefb2429b869f6fe386c15, type: 3}
+  TilePrefabByEffects:
+  - TileEffect: 1
+    Tile: {fileID: -3714437693719599373, guid: 8eedf6ee97201a6498649744a5f34d87, type: 3}
+  - TileEffect: 2
+    Tile: {fileID: 7133120562981584791, guid: 09e3790b3b76fa248b1caa0ec8f84e7a, type: 3}
+  - TileEffect: 3
+    Tile: {fileID: 4728151465009564248, guid: 37cdb2a8d30408b46b8bdb65ae3bb19a, type: 3}
+  - TileEffect: 4
+    Tile: {fileID: 7302218616520532963, guid: 9da295e7c05319f4d9b49a641b6bc6e4, type: 3}
 --- !u!1 &1151460612
 GameObject:
   m_ObjectHideFlags: 0
@@ -3244,7 +3249,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3466,7 +3471,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3846,7 +3851,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 176bef3a24756214ab506f8585fcd3c8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

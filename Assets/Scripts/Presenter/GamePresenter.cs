@@ -12,6 +12,8 @@ namespace TripletsAnimalMatch
         private GameView _gameView;
         private GameModel _gameModel;
 
+        private bool isGameOver = false;
+
         [Inject]
         public void Construct(GameView gameView, GameModel gameModel, SignalBus signalBus)
         {
@@ -53,8 +55,8 @@ namespace TripletsAnimalMatch
             if (_gameView.IsTopPanelHaveFreePlace())
             {
                 clickOnTileSignal.Tile.SwitchOffRigidbodyAndCollider();
-                _gameModel.RemoveTileFromListActiveTiles(clickOnTileSignal.Tile);
                 _gameView.GoTileOnPanel(clickOnTileSignal.Tile);
+                _gameModel.RemoveTileFromListActiveTiles(clickOnTileSignal.Tile);                
             }
         }
 
@@ -76,8 +78,11 @@ namespace TripletsAnimalMatch
 
         private void CheckGameOver()
         {
-            if (_gameModel.IsGameOver())
+            if (isGameOver == false && _gameModel.IsGameOver())
+            {
+                isGameOver = true;
                 _gameView.ShowScreenGameOver();
+            }
         }
 
         private void CheckOnWin()

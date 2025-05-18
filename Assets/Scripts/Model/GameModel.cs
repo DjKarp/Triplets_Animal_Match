@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace TripletsAnimalMatch
 
         private List<Tile> _activeTiles = new List<Tile>();
         public List<Tile> ActiveTiles { get => _activeTiles; set => _activeTiles = value; }
-        private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();
+        private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();        
 
         [Inject]
         public void Construct(GamePresenter gamePresenter, TileData tileData, GameplayData gameplayData, TopPanel topPanel, SignalBus signalBus)
@@ -33,11 +34,13 @@ namespace TripletsAnimalMatch
         private void Awake()
         {
             _transform = gameObject.transform;
+
+            _signalBus.Subscribe<TileOnFinishSignal>(CheckFrozedTiles);
         }
 
         public bool IsGameOver()
         {
-            return _topPanel.TilesContainer.All(x => x != null);
+            return _topPanel.TilesContainer.All(x => x != null) | (_topPanel.TilesContainer.All(x => x == null) == false && _activeTiles.Count == 0);
         }
 
         public bool IsWinner()
@@ -45,30 +48,19 @@ namespace TripletsAnimalMatch
             return _topPanel.TilesContainer.All(x => x == null) && _activeTiles.Count == 0;
         }
 
-        public List<Tile> CreateTiles(int tilesCount = 0)
+        public void RemoveTileFromListActiveTiles(Tile tile)
         {
-            _activeTiles.Clear();
-            List<Tile> tiles = new List<Tile>();
-            Tile tile;
-            var random = new System.Random();
+            _activeTiles.Remove(tile);
+        }
 
-            List<TileModel> tileModels = new List<TileModel>(CreateUniqueTileModels(tilesCount == 0 ? _gameplayData.MaxCountTiles : tilesCount));
+        public int GetTilesCount()
+        {
+            return _activeTiles.Count + _topPanel.PlaceUseCount;
+        }
 
-            foreach (TileModel model in tileModels)
-            {
-                tile = null;
-                for (int i = 0; i < _gameplayData.MatchCountTiles; i++)
-                {
-                    tile = Instantiate(_tileData.Tile, _transform);
-                    tile.Init(model, GetShapeSprite((int)model.Shape, (int)model.Color), _tileData.AnimalTexture[(int)model.AnimalType], _tileData.ShapesColliders[(int)model.Shape], _signalBus);
-                    tile.gameObject.SetActive(false);
-                    tiles.Add(tile);
-                }
-            }
-
-            _activeTiles = tiles.OrderBy(_ => random.Next()).ToList();
-
-            return _activeTiles;
+        public bool IsAllClickedTileMoveOnPanel()
+        {
+            return _topPanel.IsAllClickedTileMoveOnPanel();
         }
 
         public List<Tile> CheckMatch()
@@ -83,11 +75,14 @@ namespace TripletsAnimalMatch
 
                     if (!_topPanelsGroup.ContainsKey(key))
                         _topPanelsGroup.Add(key, new List<Tile>());
+
                     _topPanelsGroup[key].Add(tile);
 
                     if (_topPanelsGroup[key].Count == _gameplayData.MatchCountTiles)
                     {
                         _activeTiles.RemoveAll(tile => _topPanelsGroup[key].Contains(tile));
+                        CheckExplodindTile(_topPanelsGroup[key]);
+
                         return _topPanelsGroup[key];
                     }
                 }
@@ -96,26 +91,82 @@ namespace TripletsAnimalMatch
             return null;
         }
 
-        public void RemoveTileFromListActiveTiles(Tile tile)
+        public void CheckExplodindTile(List<Tile> tiles)
         {
-            _activeTiles.Remove(tile);
-        }        
+            foreach (Tile tile in tiles.Where(t => t is TileExploding).ToList())
+            {
+                int indexOnTopPanel = Array.IndexOf(_topPanel.TilesContainer, tile);
 
-        public int GetTilesCount()
-        {
-            return _activeTiles.Count + _topPanel.PlaceUseCount;
+                if (indexOnTopPanel > 0)
+                {
+                    Tile checkTileLeft = _topPanel.TilesContainer[indexOnTopPanel - 1];
+
+                    if (checkTileLeft != null && tiles.Contains(checkTileLeft) == false)
+                        _topPanel.RemoveTileFromPanel(checkTileLeft, true);
+                }
+
+                if (indexOnTopPanel < _topPanel.TilesContainer.Length)
+                {
+                    Tile checkTileRight = _topPanel.TilesContainer[indexOnTopPanel + 1];
+
+                    if (checkTileRight != null && tiles.Contains(checkTileRight) == false)
+                        _topPanel.RemoveTileFromPanel(checkTileRight, true);
+                }
+            }
         }
 
-        public bool IsAllClickedTileMoveOnPanel()
+        private void CheckFrozedTiles(TileOnFinishSignal tileOnFinishSignal)
         {
-            return _topPanel.IsAllClickedTileMoveOnPanel();
+            if (_gameplayData.MaxCountTiles - GetTilesCount() > _gameplayData.NumberTilesToUnfreeze && _activeTiles.OfType<TileFrozen>().Where(t => t.IsFreezed).Any())
+                foreach (TileFrozen tile in _activeTiles.OfType<TileFrozen>().Where(t => t.IsFreezed).ToList())
+                    tile.Unfreeze();
+        }
+
+        public List<Tile> CreateTiles(int tilesCount = 0)
+        {
+            _activeTiles.Clear();
+
+            Tile tile;
+            List<Tile> tiles = new List<Tile>();
+            Dictionary<TileData.TileEffect, int> tileEffectCounts = new Dictionary<TileData.TileEffect, int>();
+            var random = new System.Random();
+
+            int tilesWhitEffectCount = _gameplayData.TileEffectCount.Sum(r => r.Count);
+
+            List<TileModel> tileModels = new List<TileModel>(CreateUniqueTileModels(tilesCount == 0 ? _gameplayData.MaxCountTiles : tilesCount));
+
+            foreach (TileModel model in tileModels)
+            {
+                tile = null;
+                for (int i = 0; i < _gameplayData.MatchCountTiles; i++)
+                {
+                    TileModel modifyModel = new TileModel(model.Shape, model.Color, model.AnimalType);
+                    int weight = random.Next(0, _gameplayData.MaxCountTiles - tiles.Count);
+
+                    if (weight < tilesWhitEffectCount)
+                    {
+                        modifyModel.TileEffect = GetTileEffect(ref tileEffectCounts);
+                        tilesWhitEffectCount--;
+                    }
+
+                    tile = Instantiate(GetTilePrefabByEffect(modifyModel), _transform);
+                    tile.Init(modifyModel, GetShapeSprite((int)modifyModel.Shape, (int)modifyModel.Color), _tileData.AnimalTexture[(int)modifyModel.AnimalType], _tileData.ShapesColliders[(int)modifyModel.Shape], _signalBus);
+                    tile.gameObject.SetActive(false);
+
+                    tiles.Add(tile);
+                }
+            }  
+            
+            _activeTiles = tiles.OrderBy(_ => random.Next()).ToList();
+
+            return _activeTiles;
         }
 
         private List<TileModel> CreateUniqueTileModels(int maxTilesCount)
         {
             int tempUniqueTilesCount = maxTilesCount / _gameplayData.MatchCountTiles;
             TileModel tileModel;
-            List<TileModel> _tileModels = new List<TileModel>();
+            List<TileModel> _tileModels = new List<TileModel>();            
             var random = new System.Random();
 
             for (int i = 0; i < tempUniqueTilesCount; i++)
@@ -152,6 +203,34 @@ namespace TripletsAnimalMatch
                 case 3:
                     return _tileData.ShapesRectangle[colorNumber];
             }
+        }
+
+        private TileData.TileEffect GetTileEffect(ref Dictionary<TileData.TileEffect, int> tileEffectCounts)
+        {
+            foreach (TileEffectCount tileEffectOnData in _gameplayData.TileEffectCount)
+            {
+                if (tileEffectCounts.ContainsKey(tileEffectOnData.TileEffect) == false)
+                {
+                    tileEffectCounts.Add(tileEffectOnData.TileEffect, 1);
+                    return tileEffectOnData.TileEffect;
+                }
+                else if (tileEffectCounts.ContainsKey(tileEffectOnData.TileEffect) && tileEffectCounts[tileEffectOnData.TileEffect] < tileEffectOnData.Count)
+                {
+                    tileEffectCounts[tileEffectOnData.TileEffect]++;
+                    return tileEffectOnData.TileEffect;
+                }
+            }
+
+            return TileData.TileEffect.None;
+        }
+
+        private Tile GetTilePrefabByEffect(TileModel model)
+        {
+            foreach (TilePrefabByEffect tileEffect in _tileData.TilePrefabByEffects)
+                if (tileEffect.TileEffect == model.TileEffect)
+                    return tileEffect.Tile;
+
+            return _tileData.Tile;
         }
     }
 }

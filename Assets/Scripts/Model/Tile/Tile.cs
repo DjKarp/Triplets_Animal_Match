@@ -19,10 +19,11 @@ namespace TripletsAnimalMatch
         [SerializeField] private SpriteRenderer _shapeSprite;
         [SerializeField] private SpriteRenderer _animalsSprite;
         [SerializeField] private Transform _colliderPosition;
-        private GameObject _colliderGO;
-        private Rigidbody2D _rigidbody2D;
+        protected GameObject ColliderGO;
+        protected Rigidbody2D Rigidbody2D;
+        private FixedJoint2D _fixedJoint;
 
-        private Tween _tween;
+        protected Tween Tween;
         private Sequence _tweenSequence;
         private SignalBus _signalBus;
 
@@ -30,16 +31,16 @@ namespace TripletsAnimalMatch
 
         private Vector3 _scaleOnTopPanel = new Vector3(0.9f, 0.9f, 0.9f);
 
-        public void Init(TileModel tileModel, Sprite shape, Sprite animals, GameObject collider, SignalBus signalBus)
+        public virtual void Init(TileModel tileModel, Sprite shape, Sprite animals, GameObject collider, SignalBus signalBus)
         {
             _tileModel = tileModel;
             _shapeSprite.sprite = shape;
             _animalsSprite.sprite = animals;
-            _colliderGO = Instantiate(collider, _colliderPosition);
+            ColliderGO = Instantiate(collider, _colliderPosition);
             _signalBus = signalBus;
 
             _transform = gameObject.transform;
-            _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 
             _signalBus.Subscribe<IsGameplayActiveSignal>(SwitchBoolIsGameplay);
         }
@@ -55,7 +56,7 @@ namespace TripletsAnimalMatch
                 .OnComplete(() => _signalBus.Fire(new TileOnTopPanelSignal(this, _topPanelSlotIndex)));
         }
 
-        public void MoveToFinish(Vector3 finishPosition, float duration)
+        public virtual void MoveToFinish(Vector3 finishPosition, float duration)
         {
             _tweenSequence = DOTween.Sequence();
 
@@ -63,7 +64,11 @@ namespace TripletsAnimalMatch
                 .Append(_transform.DOMove(finishPosition, duration).SetEase(Ease.InOutElastic))
                 .Append(_transform.DOShakeScale(0.2f))
                 .Append(_transform.DOScale(Vector3.zero, duration / 5))
-                .OnComplete(() => gameObject.SetActive(false));
+                .OnComplete(() =>
+                {
+                    _signalBus.Fire(new TileOnFinishSignal());
+                    gameObject.SetActive(false);
+                });
         }
 
         public void DestroyFromGamefield()
@@ -78,14 +83,19 @@ namespace TripletsAnimalMatch
 
         private void OnMouseDown()
         {
+            OnTileClick();
+        }
+
+        public virtual void OnTileClick()
+        {
             if (_isGameplayActive)
                 _signalBus.Fire(new ClickOnTileSignal(this));
         }
 
-        public void SwitchOffRigidbodyAndCollider()
+        public virtual void SwitchOffRigidbodyAndCollider()
         {
-            _rigidbody2D.simulated = false;
-            _colliderGO.gameObject.SetActive(false);
+            Rigidbody2D.simulated = false;
+            ColliderGO.gameObject.SetActive(false);
             _shapeSprite.sortingOrder++;
             _animalsSprite.sortingOrder++;
         }
@@ -95,9 +105,23 @@ namespace TripletsAnimalMatch
             _isGameplayActive = startStopGameplay.IsActive;
         }
 
+        public void AttachTile(Rigidbody2D rigidbody2D)
+        {
+            _fixedJoint = gameObject.AddComponent<FixedJoint2D>();
+            _fixedJoint.connectedBody = rigidbody2D;
+            _fixedJoint.autoConfigureConnectedAnchor = true;
+            _fixedJoint.enableCollision = false;
+        }
+
+        public void DeattachTile()
+        {
+            if (_fixedJoint != null)
+                Destroy(_fixedJoint);
+        }
+
         private void OnDisable()
         {
-            _tween.Kill(true);
+            Tween.Kill(true);
             _tweenSequence.Kill(true);
         }
     }
