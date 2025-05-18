@@ -79,13 +79,10 @@ namespace TripletsAnimalMatch
         private void OnMouseDown()
         {
             if (_isGameplayActive)
-            {
                 _signalBus.Fire(new ClickOnTileSignal(this));
-                SwitchOffRigidbodyAndCollider();
-            }
         }
 
-        private void SwitchOffRigidbodyAndCollider()
+        public void SwitchOffRigidbodyAndCollider()
         {
             _rigidbody2D.simulated = false;
             _colliderGO.gameObject.SetActive(false);

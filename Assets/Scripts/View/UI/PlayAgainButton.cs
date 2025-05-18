@@ -6,6 +6,8 @@ namespace TripletsAnimalMatch
 {
     public class PlayAgainButton : MonoBehaviour
     {
+        // This animation option for the button is made in the DoTween
+
         private void OnMouseDown()
         {
             Sequence sequence = DOTween.Sequence();

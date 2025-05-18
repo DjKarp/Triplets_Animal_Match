@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 3088144994076575730}
   - component: {fileID: 5609737848590359859}
   m_Layer: 0
-  m_Name: Fishka
+  m_Name: TilePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

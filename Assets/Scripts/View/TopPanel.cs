@@ -15,6 +15,7 @@ namespace TripletsAnimalMatch
         private bool[] _placesUse;
 
         public int PlaceUseCount { get => _placesUse.Count(x => x == true); }
+        public bool IsHaveFreePlace { get => _placesUse.Count(x => x == true) < _tilesContainer.Length; }
 
         protected override void Init()
         {

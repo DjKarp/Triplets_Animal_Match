@@ -8,9 +8,11 @@ namespace TripletsAnimalMatch
     public class ReloadTilesButton : MonoBehaviour
     {
         private GameView _gameView;
-        private List<SpriteRenderer> _spriteRenderers;
-        private Animator _animator;
+        private List<SpriteRenderer> _spriteRenderers;        
         private PolygonCollider2D _collider;
+
+        // This animation option for the button is made in the animator, for example
+        private Animator _animator;
 
         [Inject]
         public void Construct(GameView gameView)
@@ -25,6 +27,10 @@ namespace TripletsAnimalMatch
             _animator = GetComponentInChildren<Animator>();
             _collider = GetComponent<PolygonCollider2D>();
         }
+        private void OnMouseDown()
+        {
+            _animator.SetTrigger("isClick");
+        }
 
         public void Hide()
         {
@@ -38,12 +44,7 @@ namespace TripletsAnimalMatch
             _collider.enabled = true;
             foreach (SpriteRenderer spriteRenderer in _spriteRenderers)
                 spriteRenderer.DOFade(1.0f, 1.0f);
-        }
-
-        private void OnMouseDown()
-        {
-            _animator.SetTrigger("isClick");            
-        }
+        }        
 
         // Call from Animations, for Example
         public void ButtonClick()

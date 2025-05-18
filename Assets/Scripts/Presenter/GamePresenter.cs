@@ -50,8 +50,12 @@ namespace TripletsAnimalMatch
 
         private void OnTileClick(ClickOnTileSignal clickOnTileSignal)
         {
-            _gameModel.RemoveTileFromListActiveTiles(clickOnTileSignal.Tile);
-            _gameView.GoTileOnPanel(clickOnTileSignal.Tile);
+            if (_gameView.IsTopPanelHaveFreePlace())
+            {
+                clickOnTileSignal.Tile.SwitchOffRigidbodyAndCollider();
+                _gameModel.RemoveTileFromListActiveTiles(clickOnTileSignal.Tile);
+                _gameView.GoTileOnPanel(clickOnTileSignal.Tile);
+            }
         }
 
         private void TryMatchTilesOnPanel(TileOnTopPanelSignal tileOnTopPanelSignal)

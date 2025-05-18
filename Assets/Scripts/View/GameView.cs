@@ -122,6 +122,11 @@ namespace TripletsAnimalMatch
             _topPanel.AddedTileOnPanel(tileOnTopPanelSignal.Tile, tileOnTopPanelSignal.NumberPosition);
         }
 
+        public bool IsTopPanelHaveFreePlace()
+        {
+            return _topPanel.IsHaveFreePlace;
+        }
+
         private void StopGame()
         {
             _reloadButton.Hide();
