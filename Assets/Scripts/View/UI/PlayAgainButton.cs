@@ -13,13 +13,16 @@ namespace TripletsAnimalMatch
         // This animation option for the button is made in the DoTween
 
         [Inject]
-        public void Cinstruct(AudioService audioService)
+        public void Construct(AudioService audioService)
         {
             _audioService = audioService;
         }
 
         private void OnMouseDown()
         {
+            _audioService.PlayUIAudio(AudioService.AudioUI.ClickOnButton);
+            _audioService.StopMusic();
+
             _sequence = DOTween.Sequence();
 
             _sequence

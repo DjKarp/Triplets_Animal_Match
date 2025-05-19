@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{385abf8b-3f91-4b31-9134-e0f86cb5a612}">
+		<property name="assetPath">
+			<value>Misic/little-dreamers-20240418-det.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>118.464</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{15bc7f89-1ca6-4790-86c6-d8f4373142d0}</destination>
+		</relationship>
+	</object>
+</objects>

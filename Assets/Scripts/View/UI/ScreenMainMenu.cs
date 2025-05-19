@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
@@ -11,9 +12,8 @@ namespace TripletsAnimalMatch
         // ƒл€ вступлени€ не стал с зависимост€ми сильно работать. —делал быстро просто, так как уже 3 дн€ прошло. 
 
         [SerializeField] private Transform _menuPictures;
-        [SerializeField] private SpriteRenderer _textBackground;
-        [SerializeField] private SpriteRenderer _textBackground2;
-        [SerializeField] private TextMeshPro _textLor;
+        [SerializeField] private List<SpriteRenderer> _textBackgroundList;
+        [SerializeField] private List<Transform> _textLorList;
         [SerializeField] private Transform _planeTransform;
         [SerializeField] private Cloud _cloud;
         [SerializeField] private GameObject _stakan;
@@ -31,9 +31,7 @@ namespace TripletsAnimalMatch
         {
             Show();
             HidePosition = StartPosition + new Vector3(-10.0f, 0.0f, 0.0f);
-
-            _textBackground.DOFade(0.0f, 0.0f);
-            _textLor.DOFade(0.0f, 0.0f);
+            HideTextAndBackground();
             _stakan.SetActive(false);
         }
 
@@ -48,12 +46,22 @@ namespace TripletsAnimalMatch
                     .DOMoveX(HidePosition.x, AnimationTime * 2.0f)
                     .From(StartPosition)
                     .SetEase(Ease.OutBounce))
-                .Append(_textBackground.DOFade(0.7f, AnimationTime))
-                .Append(_textLor.DOFade(1.0f, AnimationTime))
-                .AppendInterval(10.0f)
-                .Append(_textBackground2.DOFade(0.0f, 0.1f))
-                .Append(_textLor.DOFade(0.0f, AnimationTime))
-                .Append(_textBackground.DOFade(0.0f, AnimationTime))
+                .Append(_textBackgroundList[0].DOFade(0.7f, AnimationTime))
+                .Insert(AnimationTime * 3.0f, _textBackgroundList[1].DOFade(0.7f, AnimationTime))
+                .Append(_textLorList[0].DOMoveX(0.0f, AnimationTime))
+                .AppendInterval(2.0f)
+                .Append(_textLorList[0].DOMoveX(-10.0f, AnimationTime))
+                .Append(_textLorList[1].DOMoveX(0.0f, AnimationTime))
+                .AppendInterval(2.0f)
+                .Append(_textLorList[1].DOMoveX(-10.0f, AnimationTime))
+                .Append(_textLorList[2].DOMoveX(0.0f, AnimationTime))
+                .AppendInterval(2.0f)
+                .Append(_textLorList[2].DOMoveX(-10.0f, AnimationTime))
+                .Append(_textLorList[3].DOMoveX(0.0f, AnimationTime))
+                .AppendInterval(2.0f)
+                .Append(_textLorList[3].DOMoveX(-10.0f, AnimationTime))
+                .Append(_textBackgroundList[0].DOFade(0.0f, AnimationTime))
+                .Append(_textBackgroundList[1].DOFade(0.0f, AnimationTime))
                 .Append(_planeTransform
                     .DOMoveX(_planeTransform.position.x - 10.0f, AnimationTime * 5.0f)
                     .SetEase(Ease.InOutExpo))
@@ -73,11 +81,19 @@ namespace TripletsAnimalMatch
         {
             _cloud.Hide();
             _stakan.SetActive(true);
-            _textBackground.DOFade(0.0f, 0.1f);
-            _textBackground2.DOFade(0.0f, 0.1f);
-            _textLor.DOFade(0.0f, 0.0f);
-
+            HideTextAndBackground();
+            foreach (Transform transform in _textLorList)
+                transform.gameObject.SetActive(false);
             _signalBus.Fire(new FinishShowLogoSignal());
+        }
+
+        private void HideTextAndBackground()
+        {
+            foreach (SpriteRenderer spriteRenderer in _textBackgroundList)
+                spriteRenderer.DOFade(0.0f, 0.0f);
+
+            foreach (Transform transform in _textLorList)
+                transform.position = transform.position + new Vector3(10.0f, 0.0f, 0.0f);
         }
 
         public override void Show(Action callback = null)

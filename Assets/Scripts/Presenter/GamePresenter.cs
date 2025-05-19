@@ -78,7 +78,7 @@ namespace TripletsAnimalMatch
 
                 _audioService.PlayGameplayAudio(AudioService.AudioGameplay.Match);
             }
-            else
+            else if (_gameModel.IsAllClickedTileMoveOnPanel())
             {
                 CheckGameOver();
             }

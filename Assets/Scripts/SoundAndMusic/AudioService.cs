@@ -57,13 +57,14 @@ namespace TripletsAnimalMatch
 
         public void StartMusic()
         {
-            _musicEvent.getDescription(out _musicDes);
-            _musicDes.getPath(out _tempPath);
-            _musicEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-
             _musicEvent = RuntimeManager.CreateInstance(_gameplayMisic);
             _musicEvent.set3DAttributes(RuntimeUtils.To3DAttributes(_camera.transform.position));
             _musicEvent.start();
+        }
+
+        public void StopMusic()
+        {
+            _musicEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         }
 
         public void PlayGameplayAudio(AudioGameplay audioGameplay)

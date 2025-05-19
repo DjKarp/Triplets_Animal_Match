@@ -9,7 +9,7 @@ namespace TripletsAnimalMatch
     {
         private GameView _gameView;
         private List<SpriteRenderer> _spriteRenderers;        
-        private PolygonCollider2D _collider;
+        private BoxCollider2D _collider;
 
         // This animation option for the button is made in the animator, for example
         private Animator _animator;
@@ -28,7 +28,7 @@ namespace TripletsAnimalMatch
             _spriteRenderers = new List<SpriteRenderer>();
             _spriteRenderers.AddRange(GetComponentsInChildren<SpriteRenderer>());
             _animator = GetComponentInChildren<Animator>();
-            _collider = GetComponent<PolygonCollider2D>();
+            _collider = GetComponent<BoxCollider2D>();
         }
         private void OnMouseDown()
         {
