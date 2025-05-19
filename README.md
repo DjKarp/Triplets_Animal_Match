@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_02.png" alt="Triplets Animal Match Icon" width="256" height="256"/>
+  <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_01.png" alt="Triplets Animal Match Icon" width="256" height="256"/>
 </p>
 
 <h1 align="center">Triplets Animal Match — Тестовое задание Unity C# Developer</h1>
@@ -33,6 +33,16 @@
 
 ## ▶️ Видео демонстрация
 
+<p align="center">  
+<b>Смотреть Видеотрейлер на RuTube - Кликни по картинке</b><br/>
+  </p>
+<p align="center">  
+  
+   [![Смотреть Видео](https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_01.png)](https://rutube.ru/video/55a5f4282da456650ef68a5144672d17/)
+   
+</p>
+
+Или посмотреть на Google Drive
 [https://drive.google.com/file/d/1PtvdDw63gc_22FPsWagBhD_gWeEOmqtf/view?usp=sharing](#) — короткое видео, демонстрирующее механику и интерфейс.
 
 ## 🎥 Скриншоты
@@ -92,12 +102,13 @@
 
 
 ## 🧾 Как запустить
+
 Скачай архив, распакуй и запусти:
-https://disk.yandex.ru/d/tDmhVfp5ieDd7Q
+скачать с моего сайта -> https://redleggames.com/Games/TripletsAnimalMatch/PC_TripletsAnimalMatch.zip
+скачать с Google Drive -> https://drive.google.com/file/d/1JWxUqeb3_fiC5slyh8CRiVeJ8NZ9yHAq/view?usp=sharing
 
 Склонируй проект:
-bash
-git clone https://github.com/DjKarp/Lost-Jelly.git
+git clone https://github.com/DjKarp/Triplets_Animal_Match.git
 
 Открыть в Unity 2022.3+ (URP)
 
