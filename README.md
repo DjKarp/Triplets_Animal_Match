@@ -109,14 +109,17 @@
 | `Zenject`       | Зависимости между классами и сигналы  |
 | `FMOD`          | Звуки и музыка                        |
 | `Паттерны`      | Boostrap, EntryPoint, MVP             |
-|-----------------|---------------------------------------|
 
 
 ## 🧾 Как запустить
 
 Скачай архив, распакуй и запусти:
-скачать с моего сайта -> https://redleggames.com/Games/TripletsAnimalMatch/PC_TripletsAnimalMatch.zip
-скачать с Google Drive -> https://drive.google.com/file/d/1JWxUqeb3_fiC5slyh8CRiVeJ8NZ9yHAq/view?usp=sharing
+
+скачать с моего сайта -> 
+https://redleggames.com/Games/TripletsAnimalMatch/PC_TripletsAnimalMatch.zip
+
+скачать с Google Drive -> 
+https://drive.google.com/file/d/1JWxUqeb3_fiC5slyh8CRiVeJ8NZ9yHAq/view?usp=sharing
 
 Склонируй проект:
 git clone https://github.com/DjKarp/Triplets_Animal_Match.git
