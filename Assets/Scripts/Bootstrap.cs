@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace TripletsAnimalMatch
 {
-    public class Boostrap : MonoBehaviour
+    public class Bootstrap : MonoBehaviour
     {
         private void Start()
         {
