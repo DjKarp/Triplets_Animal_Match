@@ -17,10 +17,10 @@ namespace TripletsAnimalMatch
 
         private void Awake()
         {
-            _signalBus.Subscribe<PlayGameSignals>(StartGame);
+            _signalBus.Subscribe<FinishShowLogoSignal>(StartGame);
         }
 
-        private void StartGame(PlayGameSignals playGameSignals)
+        private void StartGame(FinishShowLogoSignal finishShowLogoSignal)
         {
             _gamePresenter.Init();
         }

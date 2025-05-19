@@ -29,6 +29,13 @@ namespace TripletsAnimalMatch
                 .SetEase(Ease.InElastic);
         }
 
+        public void SimplyShow()
+        {
+            Tween = Transform
+                .DOLocalMoveY(StartPosition.y, AnimationTime)
+                .From(HidePosition.y);
+        }
+
         public override void Show(Action callback)
         {
             Tween = Transform

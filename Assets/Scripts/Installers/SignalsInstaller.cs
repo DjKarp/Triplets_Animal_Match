@@ -28,6 +28,10 @@ namespace TripletsAnimalMatch
             Container
                 .DeclareSignal<PlayGameSignals>()
                 .OptionalSubscriber();
+
+            Container
+                .DeclareSignal<FinishShowLogoSignal>()
+                .OptionalSubscriber();
         }
     }
 }

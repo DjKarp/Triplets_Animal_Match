@@ -35,12 +35,12 @@ namespace TripletsAnimalMatch
         {
             _transform = gameObject.transform;
 
-            _signalBus.Subscribe<TileOnFinishSignal>(CheckFrozedTiles);
+            _signalBus.Subscribe<TileOnFinishSignal>(CheckConditions);
         }
 
         public bool IsGameOver()
         {
-            return _topPanel.TilesContainer.All(x => x != null) | (_topPanel.TilesContainer.All(x => x == null) == false && _activeTiles.Count == 0);
+            return _topPanel.TilesContainer.All(x => x != null) || (_topPanel.TilesContainer.Where(x => x != null).Any() && _activeTiles.Count == 0);
         }
 
         public bool IsWinner()
@@ -115,7 +115,13 @@ namespace TripletsAnimalMatch
             }
         }
 
-        private void CheckFrozedTiles(TileOnFinishSignal tileOnFinishSignal)
+        private void CheckConditions(TileOnFinishSignal tileOnFinishSignal)
+        {
+            _gamePresenter.CheckOnWin();
+            CheckFrozedTiles();
+        }
+
+        private void CheckFrozedTiles()
         {
             if (_gameplayData.MaxCountTiles - GetTilesCount() > _gameplayData.NumberTilesToUnfreeze && _activeTiles.OfType<TileFrozen>().Where(t => t.IsFreezed).Any())
                 foreach (TileFrozen tile in _activeTiles.OfType<TileFrozen>().Where(t => t.IsFreezed).ToList())

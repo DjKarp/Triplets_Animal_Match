@@ -12,8 +12,6 @@ namespace TripletsAnimalMatch
         private GameView _gameView;
         private GameModel _gameModel;
 
-        private bool isGameOver = false;
-
         [Inject]
         public void Construct(GameView gameView, GameModel gameModel, SignalBus signalBus)
         {
@@ -57,7 +55,7 @@ namespace TripletsAnimalMatch
                 clickOnTileSignal.Tile.SwitchOffRigidbodyAndCollider();
                 _gameView.GoTileOnPanel(clickOnTileSignal.Tile);
                 _gameModel.RemoveTileFromListActiveTiles(clickOnTileSignal.Tile);                
-            }
+            }            
         }
 
         private void TryMatchTilesOnPanel(TileOnTopPanelSignal tileOnTopPanelSignal)
@@ -71,30 +69,25 @@ namespace TripletsAnimalMatch
                     _gameView.GoTileToFinish(tile);
                 }
             }
-
-            if (CheckOnWin() == false)
+            else
+            {
                 CheckGameOver();
+            }
         }
 
         private void CheckGameOver()
         {
-            if (isGameOver == false && _gameModel.IsGameOver())
+            if (_gameModel.IsWinner() == false && _gameModel.IsGameOver())
             {
-                isGameOver = true;
                 _gameView.ShowScreenGameOver();
             }
         }
 
-        private bool CheckOnWin()
+        public void CheckOnWin()
         {
             if (_gameModel.IsWinner())
             {
                 _gameView.ShowScreenWinner();
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }
