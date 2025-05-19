@@ -14,6 +14,8 @@ namespace TripletsAnimalMatch
         private TopPanel _topPanel;
         private SignalBus _signalBus;
 
+        private AudioService _audioService;
+
         private Transform _transform;
 
         private List<Tile> _activeTiles = new List<Tile>();
@@ -21,12 +23,13 @@ namespace TripletsAnimalMatch
         private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();        
 
         [Inject]
-        public void Construct(GamePresenter gamePresenter, TileData tileData, GameplayData gameplayData, TopPanel topPanel, SignalBus signalBus)
+        public void Construct(GamePresenter gamePresenter, TileData tileData, GameplayData gameplayData, TopPanel topPanel, AudioService audioService, SignalBus signalBus)
         {
             _gamePresenter = gamePresenter;
             _tileData = tileData;
             _gameplayData = gameplayData;
             _topPanel = topPanel;
+            _audioService = audioService;
 
             _signalBus = signalBus;
         }
@@ -102,7 +105,10 @@ namespace TripletsAnimalMatch
                     Tile checkTileLeft = _topPanel.TilesContainer[indexOnTopPanel - 1];
 
                     if (checkTileLeft != null && tiles.Contains(checkTileLeft) == false)
+                    {
                         _topPanel.RemoveTileFromPanel(checkTileLeft, true);
+                        _audioService.PlayGameplayAudio(AudioService.AudioGameplay.ExplousenTile);
+                    }
                 }
 
                 if (indexOnTopPanel < _topPanel.TilesContainer.Length)
@@ -110,7 +116,10 @@ namespace TripletsAnimalMatch
                     Tile checkTileRight = _topPanel.TilesContainer[indexOnTopPanel + 1];
 
                     if (checkTileRight != null && tiles.Contains(checkTileRight) == false)
+                    {
                         _topPanel.RemoveTileFromPanel(checkTileRight, true);
+                        _audioService.PlayGameplayAudio(AudioService.AudioGameplay.ExplousenTile);
+                    }
                 }
             }
         }

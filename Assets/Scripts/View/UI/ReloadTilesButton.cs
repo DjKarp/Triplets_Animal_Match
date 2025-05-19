@@ -14,10 +14,13 @@ namespace TripletsAnimalMatch
         // This animation option for the button is made in the animator, for example
         private Animator _animator;
 
+        private AudioService _audioService;
+
         [Inject]
-        public void Construct(GameView gameView)
+        public void Construct(GameView gameView, AudioService audioService)
         {
             _gameView = gameView;
+            _audioService = audioService;
         }
 
         private void Awake()
@@ -30,6 +33,7 @@ namespace TripletsAnimalMatch
         private void OnMouseDown()
         {
             _animator.SetTrigger("isClick");
+            _audioService.PlayUIAudio(AudioService.AudioUI.ClickOnButton);
         }
 
         public void Hide()

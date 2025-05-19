@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{a1ae6d2c-033a-464d-afb9-e54a7e5a81d4}">
+		<property name="assetPath">
+			<value>Sound/Gameplay/Falling.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.49632653061224491</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{15bc7f89-1ca6-4790-86c6-d8f4373142d0}</destination>
+		</relationship>
+	</object>
+</objects>

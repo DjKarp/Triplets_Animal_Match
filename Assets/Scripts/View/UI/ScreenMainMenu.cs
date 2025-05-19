@@ -12,8 +12,9 @@ namespace TripletsAnimalMatch
 
         [SerializeField] private Transform _menuPictures;
         [SerializeField] private SpriteRenderer _textBackground;
+        [SerializeField] private SpriteRenderer _textBackground2;
         [SerializeField] private TextMeshPro _textLor;
-        [SerializeField] private Transform _flyTransform;
+        [SerializeField] private Transform _planeTransform;
         [SerializeField] private Cloud _cloud;
         [SerializeField] private GameObject _stakan;
 
@@ -49,11 +50,12 @@ namespace TripletsAnimalMatch
                     .SetEase(Ease.OutBounce))
                 .Append(_textBackground.DOFade(0.7f, AnimationTime))
                 .Append(_textLor.DOFade(1.0f, AnimationTime))
-                .AppendInterval(50.0f)
+                .AppendInterval(10.0f)
+                .Append(_textBackground2.DOFade(0.0f, 0.1f))
                 .Append(_textLor.DOFade(0.0f, AnimationTime))
                 .Append(_textBackground.DOFade(0.0f, AnimationTime))
-                .Append(_flyTransform
-                    .DOMoveX(_flyTransform.position.x - 10.0f, AnimationTime * 5.0f)
+                .Append(_planeTransform
+                    .DOMoveX(_planeTransform.position.x - 10.0f, AnimationTime * 5.0f)
                     .SetEase(Ease.InOutExpo))
                 .OnComplete(() => HideLogo());
         }
@@ -71,7 +73,8 @@ namespace TripletsAnimalMatch
         {
             _cloud.Hide();
             _stakan.SetActive(true);
-            _textBackground.DOFade(0.0f, 0.0f);
+            _textBackground.DOFade(0.0f, 0.1f);
+            _textBackground2.DOFade(0.0f, 0.1f);
             _textLor.DOFade(0.0f, 0.0f);
 
             _signalBus.Fire(new FinishShowLogoSignal());

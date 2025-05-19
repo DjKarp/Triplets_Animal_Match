@@ -10,12 +10,14 @@ namespace TripletsAnimalMatch
         private Color _startColor;
         private SpriteRenderer _spriteRenderer;
         private SignalBus _signalbus;
+        private AudioService _audioService;
         private Sequence _sequence;
 
         [Inject]
-        public void Construct(SignalBus signalBus)
+        public void Construct(SignalBus signalBus, AudioService audioService)
         {
             _signalbus = signalBus;
+            _audioService = audioService;
         }
 
         private void Awake()
@@ -26,6 +28,8 @@ namespace TripletsAnimalMatch
 
         private void OnMouseDown()
         {
+            _audioService.PlayUIAudio(AudioService.AudioUI.ClickOnButton);
+
             _sequence = DOTween.Sequence();
             _sequence
                 .Append(_spriteRenderer.DOColor(_pressButtonColor, 0.2f))

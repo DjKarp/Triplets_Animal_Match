@@ -1,14 +1,22 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace TripletsAnimalMatch
 {
     public class PlayAgainButton : MonoBehaviour
     {
         private Sequence _sequence;
+        private AudioService _audioService;
 
         // This animation option for the button is made in the DoTween
+
+        [Inject]
+        public void Cinstruct(AudioService audioService)
+        {
+            _audioService = audioService;
+        }
 
         private void OnMouseDown()
         {

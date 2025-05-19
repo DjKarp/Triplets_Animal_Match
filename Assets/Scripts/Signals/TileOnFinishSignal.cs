@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TripletsAnimalMatch
 {
-    public class TileOnFinishSignal : MonoBehaviour
+    public class TileOnFinishSignal
     {
         public TileOnFinishSignal()
         {

@@ -24,5 +24,10 @@ namespace TripletsAnimalMatch
         {
             _gamePresenter.Init();
         }
+
+        private void OnDisable()
+        {
+            _signalBus.Unsubscribe<FinishShowLogoSignal>(StartGame);
+        }
     }
 }
