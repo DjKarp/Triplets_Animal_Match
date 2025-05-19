@@ -11,7 +11,6 @@ namespace TripletsAnimalMatch
         public int MatchCountTiles { get => _gameplayDataSO.MatchCountTiles; }
         public float TimeSpawn { get => _gameplayDataSO.TimeSpawn; }
         public float MoveTileTime { get => _gameplayDataSO.MoveTileTime; }
-        public float MaxStickTiles { get => _gameplayDataSO.MaxStickTiles; }
         public float NumberTilesToUnfreeze { get => _gameplayDataSO.NumberTilesToUnfreeze; }
         public List<TileEffectCount> TileEffectCount { get => _gameplayDataSO.TileEffectCount; }
     }
