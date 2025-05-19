@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_01.png" alt="Triplets Animal Match Icon" width="256" height="256"/>
+  <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_200_02.png" alt="Triplets Animal Match Icon" width="256" height="256"/>
 </p>
 
 <h1 align="center">Triplets Animal Match — Тестовое задание Unity C# Developer</h1>
@@ -33,17 +33,20 @@
 
 ## ▶️ Видео демонстрация
 
-<p align="center">  
+<p align="Left">  
 <b>Смотреть Видеотрейлер на RuTube - Кликни по картинке</b><br/>
   </p>
-<p align="center">  
+<p align="center">
   
-   [![Смотреть Видео](https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_01.png)](https://rutube.ru/video/55a5f4282da456650ef68a5144672d17/)
+   [![Смотреть Видео](https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_200_01.png)](https://rutube.ru/video/55a5f4282da456650ef68a5144672d17/)
    
 </p>
 
-Или посмотреть на Google Drive
-[https://drive.google.com/file/d/1PtvdDw63gc_22FPsWagBhD_gWeEOmqtf/view?usp=sharing](#) — короткое видео, демонстрирующее механику и интерфейс.
+<p align="Left">  
+<b>Или посмотреть на Google Drive</b><br/>
+</p>
+
+[![Смотреть Видео](https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_200_03.png)](https://drive.google.com/file/d/1PtvdDw63gc_22FPsWagBhD_gWeEOmqtf/view?usp=sharing)
 
 ## 🎥 Скриншоты
 
@@ -59,13 +62,18 @@
 ## 📁 Структура проекта
 <pre> ```Assets/
 ├── Animation/          # Анимации кнопки для примера
+│
 ├── FMOD/               # Проект FMOD 
+│
 ├── Prefab/
 │   └── ShapeRigidbody/ # Префабы Collider2D для разного типа тайлов
+│
 ├── Scenes/             # Все сцены игры 
 │   ├── Bootstrap       # Разгоночная сцена, содержит только загрузочный экран, с неё запускаются все остальные сцены
 │   └── Game            # Сцена на корторой создаётся игровое окружение и геймплей
+│
 ├── ScriptableObject/   # Файл настроек игры. (подробности чуть ниже)
+│
 ├── Scripts/
 │   ├── Audio/          # Audio Service для звука
 │   ├── Environment/    # Поведение / элементы уровня
@@ -76,8 +84,11 @@
 │   ├── Signals/        # Zenject сигналы
 │   └──View/            # Всё что отвечает за вид игры и отображение
 │        └── UI/        # Экраны поражения, победы, меню (меню имеет стартовый мультик и описание)
+│
 ├──  Settings/          # Разнообразные настройки для плагинов и физические настройки тайлов
+│
 ├──  StreamingAssets/   # FMOD банки
+│
 └── Textures/             
 │   ├── Animals pack/   # Спрайты голов животных для тайлов
 │   ├── Effects/        # Картинки эффектов, которые накладываются на ижображения голов животных, если особый тайл
