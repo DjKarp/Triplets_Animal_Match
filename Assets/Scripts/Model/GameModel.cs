@@ -9,10 +9,11 @@ namespace TripletsAnimalMatch
     public class GameModel : MonoBehaviour
     {
         private GamePresenter _gamePresenter;
-        private TileData _tileData;
         private GameplayData _gameplayData;
         private TopPanel _topPanel;
         private SignalBus _signalBus;
+
+        private TileFactory _tileFactory;
 
         private AudioService _audioService;
 
@@ -23,15 +24,16 @@ namespace TripletsAnimalMatch
         private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();        
 
         [Inject]
-        public void Construct(GamePresenter gamePresenter, TileData tileData, GameplayData gameplayData, TopPanel topPanel, AudioService audioService, SignalBus signalBus)
+        public void Construct(GamePresenter gamePresenter, GameplayData gameplayData, TopPanel topPanel, AudioService audioService, SignalBus signalBus, TileFactory tileFactory)
         {
             _gamePresenter = gamePresenter;
-            _tileData = tileData;
             _gameplayData = gameplayData;
             _topPanel = topPanel;
             _audioService = audioService;
 
             _signalBus = signalBus;
+
+            _tileFactory = tileFactory;
         }
 
         private void Awake()
@@ -139,113 +141,12 @@ namespace TripletsAnimalMatch
 
         public List<Tile> CreateTiles(int tilesCount = 0)
         {
-            _activeTiles.Clear();
-
-            Tile tile;
-            List<Tile> tiles = new List<Tile>();
-            Dictionary<TileData.TileEffect, int> tileEffectCounts = new Dictionary<TileData.TileEffect, int>();
             var random = new System.Random();
 
-            int tilesWhitEffectCount = _gameplayData.TileEffectCount.Sum(r => r.Count);
-
-            List<TileModel> tileModels = new List<TileModel>(CreateUniqueTileModels(tilesCount == 0 ? _gameplayData.MaxCountTiles : tilesCount));
-
-            foreach (TileModel model in tileModels)
-            {
-                tile = null;
-                for (int i = 0; i < _gameplayData.MatchCountTiles; i++)
-                {
-                    TileModel modifyModel = new TileModel(model.Shape, model.Color, model.AnimalType);
-                    int weight = random.Next(0, _gameplayData.MaxCountTiles - tiles.Count);
-
-                    if (weight < tilesWhitEffectCount)
-                    {
-                        modifyModel.TileEffect = GetTileEffect(ref tileEffectCounts);
-                        tilesWhitEffectCount--;
-                    }
-
-                    tile = Instantiate(GetTilePrefabByEffect(modifyModel), _transform);
-                    tile.Init(modifyModel, GetShapeSprite((int)modifyModel.Shape, (int)modifyModel.Color), _tileData.AnimalTexture[(int)modifyModel.AnimalType], _tileData.ShapesColliders[(int)modifyModel.Shape], _signalBus);
-                    tile.gameObject.SetActive(false);
-
-                    tiles.Add(tile);
-                }
-            }  
-            
-            _activeTiles = tiles.OrderBy(_ => random.Next()).ToList();
+            _activeTiles.Clear();            
+            _activeTiles = _tileFactory.Create(_transform, tilesCount).OrderBy(_ => random.Next()).ToList();    // Перемешаем второй раз
 
             return _activeTiles;
-        }
-
-        private List<TileModel> CreateUniqueTileModels(int maxTilesCount)
-        {
-            int tempUniqueTilesCount = maxTilesCount / _gameplayData.MatchCountTiles;
-            TileModel tileModel;
-            List<TileModel> _tileModels = new List<TileModel>();            
-            var random = new System.Random();
-
-            for (int i = 0; i < tempUniqueTilesCount; i++)
-            {
-                do
-                {
-                    tileModel = new TileModel(
-                        (TileData.Shape)random.Next(0, System.Enum.GetNames(typeof(TileData.Shape)).Length),
-                        (TileData.Color)random.Next(0, System.Enum.GetNames(typeof(TileData.Color)).Length),
-                        (TileData.AnimalType)random.Next(0, System.Enum.GetNames(typeof(TileData.AnimalType)).Length));
-                }
-                while (_tileModels.Contains(tileModel));
-                
-                _tileModels.Add(tileModel);
-            }
-
-            return _tileModels;
-        }        
-
-        private Sprite GetShapeSprite(int shapeNumber, int colorNumber)
-        {
-            switch (shapeNumber)
-            {
-                default:
-                case 0:
-                    return _tileData.ShapesCircle[colorNumber];
-
-                case 1:
-                    return _tileData.ShapesHexagon[colorNumber];
-
-                case 2:
-                    return _tileData.ShapesPentagon[colorNumber];
-
-                case 3:
-                    return _tileData.ShapesRectangle[colorNumber];
-            }
-        }
-
-        private TileData.TileEffect GetTileEffect(ref Dictionary<TileData.TileEffect, int> tileEffectCounts)
-        {
-            foreach (TileEffectCount tileEffectOnData in _gameplayData.TileEffectCount)
-            {
-                if (tileEffectCounts.ContainsKey(tileEffectOnData.TileEffect) == false)
-                {
-                    tileEffectCounts.Add(tileEffectOnData.TileEffect, 1);
-                    return tileEffectOnData.TileEffect;
-                }
-                else if (tileEffectCounts.ContainsKey(tileEffectOnData.TileEffect) && tileEffectCounts[tileEffectOnData.TileEffect] < tileEffectOnData.Count)
-                {
-                    tileEffectCounts[tileEffectOnData.TileEffect]++;
-                    return tileEffectOnData.TileEffect;
-                }
-            }
-
-            return TileData.TileEffect.None;
-        }
-
-        private Tile GetTilePrefabByEffect(TileModel model)
-        {
-            foreach (TilePrefabByEffect tileEffect in _tileData.TilePrefabByEffects)
-                if (tileEffect.TileEffect == model.TileEffect)
-                    return tileEffect.Tile;
-
-            return _tileData.Tile;
         }
     }
 }

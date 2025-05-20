@@ -5,9 +5,11 @@ namespace TripletsAnimalMatch
 {
     public class Bootstrap : MonoBehaviour
     {
+        private const string GameplaySceneName = "Gameplay";
+
         private void Start()
         {
-            SceneManager.LoadScene("Gameplay");
+            SceneManager.LoadScene(GameplaySceneName);
         }
     }
 }

@@ -10,15 +10,24 @@ namespace TripletsAnimalMatch
 
         public override void InstallBindings()
         {
+            BindSpawnPoint();
+            BindTopPanel();
+        }        
+
+        private void BindSpawnPoint()
+        {
             Container
                 .Bind<SpawnPoint>()
                 .FromInstance(_spawnPoint)
                 .AsCached();
-
+        }
+        private void BindTopPanel()
+        {
             Container
                 .Bind<TopPanel>()
                 .FromInstance(_topPanel)
                 .AsSingle();
         }
+
     }
 }

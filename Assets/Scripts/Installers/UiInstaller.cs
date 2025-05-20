@@ -8,6 +8,11 @@ namespace TripletsAnimalMatch
         [SerializeField] private ReloadTilesButton _reloadTilesButton;    
         public override void InstallBindings()
         {
+            BindGameplayButtonsInstallers();
+        }
+
+        private void BindGameplayButtonsInstallers()
+        {
             Container
                 .Bind<ReloadTilesButton>()
                 .FromInstance(_reloadTilesButton)

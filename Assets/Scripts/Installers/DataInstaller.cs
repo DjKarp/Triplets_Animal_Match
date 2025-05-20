@@ -10,11 +10,20 @@ namespace TripletsAnimalMatch
 
         public override void InstallBindings()
         {
+            BindGameplayData();
+            BindTileData();
+        }
+
+        private void BindGameplayData()
+        {
             Container
                 .Bind<GameplayData>()
                 .FromInstance(_gameplayData)
                 .AsCached();
+        }
 
+        private void BindTileData()
+        {
             Container
                 .Bind<TileData>()
                 .FromInstance(_tileData)
