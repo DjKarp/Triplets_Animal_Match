@@ -14,6 +14,7 @@ namespace TripletsAnimalMatch
         private Tile tile;
         private TileModel _tileModel;
         private List<Tile> tiles = new List<Tile>();
+        List<TileModel> _tileModels = new List<TileModel>();
         private Dictionary<TileData.TileEffect, int> tileEffectCounts = new Dictionary<TileData.TileEffect, int>();
 
         [Inject]
@@ -71,9 +72,9 @@ namespace TripletsAnimalMatch
 
         private List<TileModel> CreateUniqueTileModels(int maxTilesCount)
         {
-            int tempUniqueTilesCount = maxTilesCount / _gameplayData.MatchCountTiles;
-            List<TileModel> _tileModels = new List<TileModel>();
+            _tileModels.Clear();
             var random = new System.Random();
+            int tempUniqueTilesCount = maxTilesCount / _gameplayData.MatchCountTiles;            
 
             for (int i = 0; i < tempUniqueTilesCount; i++)
             {
@@ -84,12 +85,23 @@ namespace TripletsAnimalMatch
                         (TileData.Color)random.Next(0, System.Enum.GetNames(typeof(TileData.Color)).Length),
                         (TileData.AnimalType)random.Next(0, System.Enum.GetNames(typeof(TileData.AnimalType)).Length));
                 }
-                while (_tileModels.Contains(_tileModel));
+                while (CheckModelOnUnique(_tileModel));
 
                 _tileModels.Add(_tileModel);
             }
 
             return _tileModels;
+        }
+
+        private bool CheckModelOnUnique(TileModel tileModel)
+        {
+            foreach (TileModel model in _tileModels)
+            {
+                if (tileModel.Shape == model.Shape && tileModel.Color == model.Color && tileModel.AnimalType == model.AnimalType)
+                    return true;
+            }
+
+            return false;
         }
 
         private Sprite GetShapeSprite(int shapeNumber, int colorNumber)
