@@ -38,7 +38,7 @@
   </p>
 <p align="center">
   
-   [![Смотреть Видео](https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_200_01.png)](https://rutube.ru/video/55a5f4282da456650ef68a5144672d17/)
+   [![Смотреть Видео](https://redleggames.com/Games/TripletsAnimalMatch/Screens/TripletsAnimalMatch_Logo_200_01.png)](https://rutube.ru/video/87b7ba113d26bdd22e6b0f0551445c77/)
    
 </p>
 
@@ -57,6 +57,7 @@
   <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/Triplets_Animal_Match_Screen_04.png" width="200"/>
   <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/Triplets_Animal_Match_Screen_05.png" width="200"/>
   <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/Triplets_Animal_Match_Screen_06.png" width="200"/>
+  <img src="https://redleggames.com/Games/TripletsAnimalMatch/Screens/Triplets_Animal_Match_Screen_07.png" width="200"/>
 </p>
 
 ## 📁 Структура проекта
