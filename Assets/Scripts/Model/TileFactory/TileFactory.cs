@@ -96,10 +96,8 @@ namespace TripletsAnimalMatch
         private bool CheckModelOnUnique(TileModel tileModel)
         {
             foreach (TileModel model in _tileModels)
-            {
-                if (tileModel.Shape == model.Shape && tileModel.Color == model.Color && tileModel.AnimalType == model.AnimalType)
+                if (tileModel.GetKey() == model.GetKey())
                     return true;
-            }
 
             return false;
         }
