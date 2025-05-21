@@ -23,7 +23,7 @@ namespace TripletsAnimalMatch
         public void Unfreeze()
         {
             _isFreezed = false;
-
+            TileModel.TileEffect = TileData.TileEffect.None;
             Tween = EffectSpriteRenderer
                 .DOFade(0.0f, 1.0f)
                 .OnComplete(() => EffectSpriteRenderer.enabled = false);

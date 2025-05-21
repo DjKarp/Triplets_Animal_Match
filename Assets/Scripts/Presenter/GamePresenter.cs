@@ -45,12 +45,12 @@ namespace TripletsAnimalMatch
                 yield return new WaitForEndOfFrame();
             }
 
-            _gameView.EraseGameField(_gameModel.ActiveTiles, () => _gameModel.ActiveTiles = new List<Tile>());
+            _gameView.EraseGameField(_gameModel.ActiveTiles);
 
             yield return new WaitForSeconds(1.0f);
 
             _audioService.StartFalling();
-            _gameView.DropTileOnScene(_gameModel.CreateTiles(count), false);
+            _gameView.DropTileOnScene(_gameModel.CreateTiles(), false);
         }
 
         private void OnTileClick(ClickOnTileSignal clickOnTileSignal)

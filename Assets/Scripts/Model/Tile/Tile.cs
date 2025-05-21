@@ -8,7 +8,7 @@ namespace TripletsAnimalMatch
     {
         private TileModel _tileModel;
 
-        public TileModel TileModel { get => _tileModel; }
+        public TileModel TileModel { get => _tileModel; set => _tileModel = value; }
 
         private Transform _transform;
         public Transform Transform { get => _transform; }

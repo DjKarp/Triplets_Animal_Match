@@ -41,6 +41,8 @@ namespace TripletsAnimalMatch
             _transform = gameObject.transform;
 
             _signalBus.Subscribe<TileOnFinishSignal>(CheckConditions);
+
+            _tileFactory.Init(_activeTiles);
         }
 
         public bool IsGameOver()
@@ -139,12 +141,13 @@ namespace TripletsAnimalMatch
                     tile.Unfreeze();
         }
 
-        public List<Tile> CreateTiles(int tilesCount = 0)
+        public List<Tile> CreateTiles()
         {
+            _tileFactory.Init(_activeTiles);
             var random = new System.Random();
 
             _activeTiles.Clear();            
-            _activeTiles = _tileFactory.Create(_transform, tilesCount).OrderBy(_ => random.Next()).ToList();    // Перемешаем второй раз
+            _activeTiles = _tileFactory.Create(_transform).OrderBy(_ => random.Next()).ToList();    // Перемешаем второй раз
 
             return _activeTiles;
         }

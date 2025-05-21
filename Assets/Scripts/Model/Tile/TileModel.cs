@@ -15,6 +15,14 @@ namespace TripletsAnimalMatch
             TileEffect = TileData.TileEffect.None;
         }
 
+        public TileModel(TileModel model)
+        {
+            Shape = model.Shape;
+            Color = model.Color;
+            AnimalType = model.AnimalType;
+            TileEffect = model.TileEffect;
+        }
+
         public string GetKey()
         {
             return $"{Shape}_{Color}_{AnimalType}";

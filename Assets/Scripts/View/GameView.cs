@@ -108,7 +108,7 @@ namespace TripletsAnimalMatch
             _gamePresenter.ReloadTiles();
         }
 
-        public void EraseGameField(List<Tile> tiles, Action onComplete)
+        public void EraseGameField(List<Tile> tiles)
         {
             for (int i = tiles.Count - 1; i >= 0; i--)
                 tiles[i].DestroyFromGamefield();
@@ -120,9 +120,7 @@ namespace TripletsAnimalMatch
                     _topPanel.RemoveTileFromPanel(_topPanel.TilesContainer[i], true);
                     _topPanel.TilesContainer[i].DestroyFromGamefield();
                 }
-            }
-
-            onComplete?.Invoke();
+            }            
         }
 
         public void AddedTileOnPanel(TileOnTopPanelSignal tileOnTopPanelSignal)
