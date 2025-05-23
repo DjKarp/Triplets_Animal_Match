@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using Zenject;
+using System;
 
 namespace TripletsAnimalMatch
 {
@@ -20,8 +21,12 @@ namespace TripletsAnimalMatch
         [SerializeField] private SpriteRenderer _animalsSprite;
         [SerializeField] private Transform _colliderPosition;
         protected GameObject ColliderGO;
-        protected Rigidbody2D Rigidbody2D;
+        protected Rigidbody2D Rigidbody2D;        
         private FixedJoint2D _fixedJoint;
+
+        private float _startRigidbodyGravityScale;
+        private int _startSortingOrderShapeSprite;
+        private int _startSortingOrderAnimalsSprite;
 
         protected Tween Tween;
         private Sequence _tweenSequence;
@@ -31,18 +36,25 @@ namespace TripletsAnimalMatch
 
         private Vector3 _scaleOnTopPanel = new Vector3(0.9f, 0.9f, 0.9f);
 
-        public virtual void Init(TileModel tileModel, Sprite shape, Sprite animals, GameObject collider, SignalBus signalBus)
+        public virtual void Init(TileModel tileModel, Sprite shape, Sprite animals, GameObject collider, SignalBus signalBus = null)
         {
             _tileModel = tileModel;
             _shapeSprite.sprite = shape;
             _animalsSprite.sprite = animals;
             ColliderGO = Instantiate(collider, _colliderPosition);
-            _signalBus = signalBus;
 
             _transform = gameObject.transform;
             Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 
-            _signalBus.Subscribe<IsGameplayActiveSignal>(SwitchBoolIsGameplay);
+            _startRigidbodyGravityScale = Rigidbody2D.gravityScale;
+            _startSortingOrderShapeSprite = _shapeSprite.sortingOrder;
+            _startSortingOrderAnimalsSprite = _animalsSprite.sortingOrder;
+
+            if (signalBus != null)
+            {
+                _signalBus = signalBus;
+                _signalBus.Subscribe<IsGameplayActiveSignal>(SwitchBoolIsGameplay);
+            }
         }
 
         public void MoveToTopPanel(Vector3 endPosition, float duration)
@@ -66,8 +78,7 @@ namespace TripletsAnimalMatch
                 .Append(_transform.DOScale(Vector3.zero, duration / 5))
                 .OnComplete(() =>
                 {
-                    _signalBus.Fire(new TileOnFinishSignal());
-                    gameObject.SetActive(false);
+                    SetDefaultState();
                 });
         }
 
@@ -76,9 +87,12 @@ namespace TripletsAnimalMatch
             _tweenSequence = DOTween.Sequence();
 
             _tweenSequence
-                .Append(_transform.DOShakeScale(UnityEngine.Random.Range(0.2f, 1.0f), strength: 0.5f))
-                .Append(_transform.DOScale(Vector3.zero, UnityEngine.Random.Range(0.2f, 1.0f)))
-                .OnComplete(() => Destroy(this));
+                .Append(_transform.DOShakeScale(UnityEngine.Random.Range(0.2f, 0.5f), strength: 0.2f))
+                .Append(_transform.DOScale(Vector3.zero, UnityEngine.Random.Range(0.2f, 0.5f)))
+                .OnComplete(() =>
+                {
+                    SetDefaultState();
+                });
         }
 
         private void OnMouseDown()
@@ -95,9 +109,21 @@ namespace TripletsAnimalMatch
         public virtual void SwitchOffRigidbodyAndCollider()
         {
             Rigidbody2D.simulated = false;
-            ColliderGO.gameObject.SetActive(false);
+            Destroy(ColliderGO);
             _shapeSprite.sortingOrder++;
             _animalsSprite.sortingOrder++;
+        }
+
+        protected virtual void SetDefaultState()
+        {
+            _transform.localScale = Vector3.one;
+            Rigidbody2D.gravityScale = _startRigidbodyGravityScale;
+            _shapeSprite.sortingOrder = _startSortingOrderShapeSprite;
+            _animalsSprite.sortingOrder = _startSortingOrderAnimalsSprite;
+            DeattachTile();
+            Destroy(ColliderGO);
+
+            _signalBus.Fire(new TileOnFinishSignal(this));
         }
 
         private void SwitchBoolIsGameplay(IsGameplayActiveSignal startStopGameplay)

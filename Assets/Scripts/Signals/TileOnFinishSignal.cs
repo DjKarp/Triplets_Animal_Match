@@ -2,9 +2,10 @@ namespace TripletsAnimalMatch
 {
     public class TileOnFinishSignal
     {
-        public TileOnFinishSignal()
+        public Tile Tile;
+        public TileOnFinishSignal(Tile tile)
         {
-
+            Tile = tile;
         }
     }
 }

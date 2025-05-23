@@ -34,11 +34,12 @@ namespace TripletsAnimalMatch
         }
 
         public void ReloadTiles()
-        {           
-            StartCoroutine(WaitBeforeDrop(_gameModel.GetTilesCount()));
+        {
+            _gameView.StartStopGameplay(false);
+            StartCoroutine(WaitBeforeDrop());
         }
 
-        private IEnumerator WaitBeforeDrop(int count)
+        private IEnumerator WaitBeforeDrop()
         {
             while(!_gameModel.IsAllClickedTileMoveOnPanel())
             {
@@ -50,7 +51,7 @@ namespace TripletsAnimalMatch
             yield return new WaitForSeconds(1.0f);
 
             _audioService.StartFalling();
-            _gameView.DropTileOnScene(_gameModel.CreateTiles(), false);
+            _gameView.DropTileOnScene(_gameModel.RefreshTiles());
         }
 
         private void OnTileClick(ClickOnTileSignal clickOnTileSignal)

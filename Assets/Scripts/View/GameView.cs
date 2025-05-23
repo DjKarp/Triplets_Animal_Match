@@ -59,13 +59,13 @@ namespace TripletsAnimalMatch
 
         public void ShowScreenGameOver()
         {
-            StopGame();
+            StartStopGameplay(false);
             _screenLooser.Show();
         }
 
         public void ShowScreenWinner()
         {
-            StopGame();
+            StartStopGameplay(false);
             _screenWinner.Show();
         }
 
@@ -74,12 +74,12 @@ namespace TripletsAnimalMatch
             _screenMainMenu.Hide();
         }
 
-        public void DropTileOnScene(List<Tile> tiles, bool isStart = true)
+        public void DropTileOnScene(List<Tile> tiles)
         {
-            _cloud.Show(() => StartCoroutine(DropTileWhitDelay(tiles, isStart)));
+            _cloud.Show(() => StartCoroutine(DropTileWhitDelay(tiles)));
         }
 
-        private IEnumerator DropTileWhitDelay(List<Tile> tiles, bool isStart = true)
+        private IEnumerator DropTileWhitDelay(List<Tile> tiles)
         {
             foreach (Tile tile in tiles)
             {
@@ -89,22 +89,11 @@ namespace TripletsAnimalMatch
                 yield return new WaitForSeconds(_gameplayData.TimeSpawn);
             }
 
-            if (isStart) 
-                _topPanel.Show();
-            _reloadButton.Show();
-
             StartStopGameplay(true);
-        }
-
-        private void StartStopGameplay(bool isStart)
-        {
-            _signalBus.Fire(new IsGameplayActiveSignal(isStart));
         }
 
         public void ReloadTiles()
         {
-            _reloadButton.Hide();
-            StartStopGameplay(false);
             _gamePresenter.ReloadTiles();
         }
 
@@ -114,13 +103,8 @@ namespace TripletsAnimalMatch
                 tiles[i].DestroyFromGamefield();
 
             for (int i = _topPanel.TilesContainer.Length - 1; i >= 0; i--)
-            {
                 if (_topPanel.TilesContainer[i] != null)
-                {
                     _topPanel.RemoveTileFromPanel(_topPanel.TilesContainer[i], true);
-                    _topPanel.TilesContainer[i].DestroyFromGamefield();
-                }
-            }            
         }
 
         public void AddedTileOnPanel(TileOnTopPanelSignal tileOnTopPanelSignal)
@@ -133,10 +117,20 @@ namespace TripletsAnimalMatch
             return _topPanel.IsHaveFreePlace;
         }
 
-        private void StopGame()
+        public void StartStopGameplay(bool isStart)
         {
-            _reloadButton.Hide();
-            StartStopGameplay(false);
+            if (isStart)
+            {
+                _topPanel.Show();
+                _reloadButton.Show();
+            }
+            else
+            {
+                _topPanel.Hide();
+                _reloadButton.Hide();
+            }
+
+            _signalBus.Fire(new IsGameplayActiveSignal(isStart));
         }
     }
 }

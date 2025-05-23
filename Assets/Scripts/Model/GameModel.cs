@@ -17,11 +17,9 @@ namespace TripletsAnimalMatch
 
         private AudioService _audioService;
 
-        private Transform _transform;
-
         private List<Tile> _activeTiles = new List<Tile>();
         public List<Tile> ActiveTiles { get => _activeTiles; set => _activeTiles = value; }
-        private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();        
+        private Dictionary<string, List<Tile>> _topPanelsGroup = new Dictionary<string, List<Tile>>();
 
         [Inject]
         public void Construct(GamePresenter gamePresenter, GameplayData gameplayData, TopPanel topPanel, AudioService audioService, SignalBus signalBus, TileFactory tileFactory)
@@ -36,9 +34,8 @@ namespace TripletsAnimalMatch
             _tileFactory = tileFactory;
         }
 
-        private void Awake()
+        private void Start()
         {
-            _transform = gameObject.transform;
 
             _signalBus.Subscribe<TileOnFinishSignal>(CheckConditions);
 
@@ -130,6 +127,7 @@ namespace TripletsAnimalMatch
 
         private void CheckConditions(TileOnFinishSignal tileOnFinishSignal)
         {
+            _tileFactory.Release(tileOnFinishSignal.Tile);
             _gamePresenter.CheckOnWin();
             CheckFrozedTiles();
         }
@@ -143,13 +141,19 @@ namespace TripletsAnimalMatch
 
         public List<Tile> CreateTiles()
         {
-            _tileFactory.Init(_activeTiles);
             var random = new System.Random();
 
             _activeTiles.Clear();            
-            _activeTiles = _tileFactory.Create(_transform).OrderBy(_ => random.Next()).ToList();    // Перемешаем второй раз
+            _activeTiles = _tileFactory.Create().OrderBy(_ => random.Next()).ToList();    // Перемешаем второй раз
 
             return _activeTiles;
+        }
+
+        public List<Tile> RefreshTiles()
+        {
+            _tileFactory.Init(_activeTiles);
+
+            return CreateTiles();
         }
     }
 }

@@ -17,6 +17,8 @@ namespace TripletsAnimalMatch
         List<TileModel> _tileModels = new List<TileModel>();
         private Dictionary<TileData.TileEffect, int> tileEffectCounts = new Dictionary<TileData.TileEffect, int>();
 
+        private TilesPool _tilesPool;
+
         [Inject]
         public void Construct(TileData tileData, GameplayData gameplayData, SignalBus signalBus)
         {
@@ -60,9 +62,17 @@ namespace TripletsAnimalMatch
                     _tileModels[i].TileEffect = _tiles[i].TileModel.TileEffect;
                 }
             }
+
+            if (_tilesPool == null)
+            {
+                _tilesPool = new TilesPool(transform, _tileData, _signalBus);
+                _tilesPool.Init(_tileModels);
+            }
+            else
+                _tilesPool.Refresh(_tileModels);
         }
 
-        public List<Tile> Create(Transform transform)
+        public List<Tile> Create()
         {
             _tiles.Clear();
             var random = new System.Random();
@@ -70,23 +80,17 @@ namespace TripletsAnimalMatch
             foreach (TileModel model in _tileModels)
             {
                 _tile = null;
-
-                _tile = Instantiate(GetTilePrefabByEffect(model.TileEffect), transform);
-
-                _tile.Init(
-                    model,
-                    GetShapeSprite((int)model.Shape, (int)model.Color),
-                    _tileData.AnimalTexture[(int)model.AnimalType],
-                    _tileData.ShapesColliders[(int)model.Shape],
-                    _signalBus);
-
-                _tile.gameObject.SetActive(false);
-
+                _tile = _tilesPool.Get(model.TileEffect);
                 _tiles.Add(_tile);
             }
 
             // Вернём в первый раз перемешанный список
             return _tiles.OrderBy(_ => random.Next()).ToList();
+        }
+
+        public void Release(Tile tile)
+        {
+            _tilesPool.Release(tile);
         }
 
         private void CreateUniqueTileModels(int maxTilesCount)
@@ -122,25 +126,6 @@ namespace TripletsAnimalMatch
             return false;
         }
 
-        private Sprite GetShapeSprite(int shapeNumber, int colorNumber)
-        {
-            switch (shapeNumber)
-            {
-                default:
-                case 0:
-                    return _tileData.ShapesCircle[colorNumber];
-
-                case 1:
-                    return _tileData.ShapesHexagon[colorNumber];
-
-                case 2:
-                    return _tileData.ShapesPentagon[colorNumber];
-
-                case 3:
-                    return _tileData.ShapesRectangle[colorNumber];
-            }
-        }
-
         private TileData.TileEffect GetTileEffect(ref Dictionary<TileData.TileEffect, int> tileEffectCounts)
         {
             foreach (TileEffectCount tileEffectOnData in _gameplayData.TileEffectCount)
@@ -158,15 +143,6 @@ namespace TripletsAnimalMatch
             }
 
             return TileData.TileEffect.None;
-        }
-
-        private Tile GetTilePrefabByEffect(TileData.TileEffect tileEffect)
-        {
-            foreach (TilePrefabByEffect tilePrefabByEffect in _tileData.TilePrefabByEffects)
-                if (tilePrefabByEffect.TileEffect == tileEffect)
-                    return tilePrefabByEffect.Tile;
-
-            return _tileData.Tile;
         }
     }
 }
